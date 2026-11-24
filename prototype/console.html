@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup · Fikua Signatura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+/* Brand: fikua — transcribed from fikua-website assets/css/main.css (light theme, read 2026-11-24).
+   Status colors are not in the website: they come from the neutral brand file of prototype-style. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+:root{
+  --primary-color:#1A4C9C; --primary-contrast-color:#ffffff; --primary-color-shade:#143b78; --primary-halo:rgba(26,76,156,.15);
+  --secondary-color:#1A4C9C; --secondary-contrast-color:#ffffff;
+  --surface-page:#FCFCFC; --surface-card:#FFFFFF; --surface-muted:#F3F4F6;
+  --text-primary:#1A1A1A; --text-secondary:#4A4A46;
+  --border-default:#E1E4DC; --border-strong:#94A3B8;
+  --action-primary:#1A4C9C; --action-primary-hover:#1A1A1A;
+  --status-success:#059669; --status-success-bg:#DCFCE7; --status-success-text:#15803D;
+  --status-warning:#D97706; --status-warning-bg:#FEF3C7; --status-warning-text:#B45309;
+  --status-error:#DC2626;   --status-error-bg:#FEE2E2;   --status-error-text:#B91C1C;
+  --status-info:#1A4C9C;    --status-info-bg:#DBEAFE;    --status-info-text:#143b78;
+  --radius-sm:.25rem; --radius-md:.5rem; --radius-lg:1rem; --radius-full:9999px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.05); --shadow-md:0 4px 6px rgba(0,0,0,.07); --shadow-lg:0 10px 15px rgba(0,0,0,.1);
+  --segment-checked-bg:#E1E4DC; --backdrop:rgba(26,26,26,.6);
+  --brand-vermilion:#E1241A; --brand-yellow:#F6C915; --brand-black:#1A1A1A;
+  --font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  color-scheme: light;
+}
+
+/* Source: prototype-style skill, brand fikua + assets/base.css, pasted verbatim. Idea: portal-dss (dss#6). */
+/* prototype-style base — brand-agnostic chrome and components.
+   Look & feel: a product UX-UI review as implemented in a real app (2026-09), applied to every surface
+   (web consoles and mobile PWA); console layout patterns from curated discovery mockups.
+   Rules: colors only from brand tokens (brands/<brand>.css), except the brand-independent --ui-* interaction colors below; sizes in rem so everything scales with the responsive
+   root font-size below (px only for hairlines, outlines and shadows). Prototype-specific rules follow the same rules. */
+
+/* ---- structural tokens (brand-independent) ---- */
+:root{
+  --space-xs:.25rem; --space-sm:.5rem; --space-md:1rem; --space-lg:1.5rem; --space-xl:2rem; --space-2xl:3rem;
+  --touch-min:2.75rem;
+  --radius-card:.75rem;
+  --shadow-card:0 1px 3px rgba(0,0,0,.06); --shadow-card-hover:0 2px 10px rgba(0,0,0,.10);
+  --ease:cubic-bezier(.2,0,0,1); --dur-fast:.15s; --dur:.2s; --dur-enter:.3s;
+  --content-max:68rem;
+  --nav-h:4.5rem;
+  /* interaction colors: brand-independent so they stay WCAG AA whatever the tenant branding */
+  --ui-focus-ring:#2563EB; --ui-caret:#1A1A2E; --ui-selection-bg:#2563EB; --ui-selection-fg:#FFFFFF;
+}
+html{font-size:16px}
+@media (max-width:374px){html{font-size:15px}}
+@media (min-width:768px){html{font-size:17px}}
+
+/* ---- reset & base ---- */
+*,*::before,*::after{box-sizing:border-box}
+html{scrollbar-gutter:stable;scroll-padding-top:var(--nav-h)}
+html,body{margin:0;padding:0;min-height:100vh}
+body{background:var(--surface-page);color:var(--text-primary);font-family:var(--font-family);
+  line-height:1.6;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;min-height:100vh}
+.page-content{flex:1 0 auto}
+a{color:var(--action-primary);text-decoration:none} a:hover{color:var(--action-primary-hover);text-decoration:underline}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+:focus-visible{outline:2px solid var(--ui-focus-ring);outline-offset:2px;border-radius:var(--radius-sm)}
+::selection{background:var(--ui-selection-bg);color:var(--ui-selection-fg)}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+select,input,textarea{font-family:inherit;font-size:inherit;caret-color:var(--ui-caret)}
+code{background:var(--surface-muted);border-radius:var(--radius-sm);padding:.05em .34em;font-family:'JetBrains Mono',monospace;font-size:.88em}
+.skip-link{position:absolute;left:-999px;top:0;background:var(--surface-card);color:var(--text-primary);padding:.6rem 1rem;border-radius:var(--radius-md);box-shadow:var(--shadow-md);z-index:70}
+.skip-link:focus{left:1rem;top:1rem}
+.i{width:1.15em;height:1.15em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.18em}
+.i.lg{width:1.5em;height:1.5em}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---- motion ---- */
+@keyframes view-fade-in{from{opacity:0}to{opacity:1}}
+@keyframes card-fade-in{from{opacity:0;transform:translateY(1.25rem)}to{opacity:1;transform:none}}
+[data-view]:not([hidden]){animation:view-fade-in .25s ease-out}
+.type-grid>*,.profile-grid>*,.card-list>*{animation:card-fade-in var(--dur-enter) ease-out both}
+.type-grid>:nth-child(2),.profile-grid>:nth-child(2),.card-list>:nth-child(2){animation-delay:.04s}
+.type-grid>:nth-child(3),.profile-grid>:nth-child(3),.card-list>:nth-child(3){animation-delay:.08s}
+.type-grid>:nth-child(4),.profile-grid>:nth-child(4),.card-list>:nth-child(4){animation-delay:.12s}
+.type-grid>:nth-child(n+5),.profile-grid>:nth-child(n+5),.card-list>:nth-child(n+5){animation-delay:.16s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
+
+/* ---- console chrome: sticky top bar + footer ---- */
+.container-nav{background:var(--primary-color);position:sticky;top:0;z-index:30}
+.main-header{display:flex;align-items:center;justify-content:space-between;gap:var(--space-md);flex-wrap:wrap;
+  min-height:var(--nav-h);padding:0 var(--space-lg);max-width:var(--content-max);margin:0 auto}
+.navbar-brand{display:flex;align-items:center;gap:.6rem}
+.navbar-brand .logo{height:2.5rem;max-width:11rem;display:block}
+.header-right{display:flex;align-items:center;gap:var(--space-md)}
+.navbar-nav{list-style:none;margin:0;padding:0;display:flex;gap:1.25rem}
+.navbar-nav .nav-link{color:var(--secondary-color);text-decoration:none;font-weight:600;font-size:.9rem;display:inline-flex;align-items:center;min-height:var(--touch-min)}
+.navbar-nav .nav-link:hover{text-decoration:underline}
+.navbar-nav .nav-link[aria-current]{box-shadow:inset 0 -2px 0 var(--secondary-color)}
+.user-menu{position:relative}
+.user-btn{display:flex;align-items:center;gap:.5rem;min-height:var(--touch-min);padding:.25rem .6rem .25rem .25rem;border-radius:var(--radius-full);
+  border:1px solid rgba(255,255,255,.35);color:var(--primary-contrast-color);transition:background var(--dur) ease}
+.user-btn:hover{background:rgba(255,255,255,.12)}
+.user-avatar{width:1.75rem;height:1.75rem;border-radius:50%;background:var(--secondary-color);color:var(--secondary-contrast-color);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;flex:none}
+.user-avatar.lg{width:2.4rem;height:2.4rem;font-size:.85rem}
+.user-name{font-size:.85rem;font-weight:600;white-space:nowrap}
+.user-btn svg{flex:none;opacity:.8}
+.user-dropdown{position:absolute;top:calc(100% + .5rem);right:0;min-width:15rem;background:var(--surface-card);color:var(--text-primary);
+  border:1px solid var(--border-default);border-radius:var(--radius-card);box-shadow:var(--shadow-lg);padding:.5rem;z-index:20}
+.user-dropdown[hidden]{display:none}
+.user-dropdown-head{display:flex;align-items:center;gap:.65rem;padding:.5rem .6rem .75rem;border-bottom:1px solid var(--border-default);margin-bottom:.4rem}
+.user-dropdown-head .nm{font-weight:700;font-size:.88rem}
+.user-dropdown-head .rl{font-size:.76rem;color:var(--text-secondary)}
+.user-dropdown-item{display:flex;align-items:center;min-height:var(--touch-min);padding:0 .6rem;border-radius:var(--radius-sm);font-size:.9rem;font-weight:500;color:var(--text-primary)}
+.user-dropdown-item:hover{background:var(--surface-muted);color:var(--text-primary);text-decoration:none}
+.main-footer{flex:none;background:var(--primary-color);color:var(--primary-contrast-color);padding:1.1rem var(--space-lg);display:flex;flex-wrap:wrap;
+  align-items:center;justify-content:center;gap:var(--space-sm);font-size:.8rem;text-align:center}
+.main-footer a{color:var(--primary-contrast-color);opacity:.85} .main-footer a:hover{opacity:1;color:var(--primary-contrast-color)}
+
+/* ---- layout ---- */
+.shell{max-width:var(--content-max);margin:0 auto;padding:var(--space-xl) var(--space-lg) 4rem}
+.layout{max-width:var(--content-max);margin:0 auto;padding:var(--space-xl) var(--space-lg);box-sizing:content-box}
+.central-section{max-width:var(--content-max);margin:0 auto;padding:0 var(--space-lg);box-sizing:content-box}
+.central-section section{margin-bottom:2.75rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 var(--space-md)}
+@media (max-width:620px){.grid2{grid-template-columns:1fr}}
+.display-split{display:grid;grid-template-columns:minmax(0,1fr) 20rem;gap:1.75rem;align-items:start}
+@media (max-width:920px){.display-split{grid-template-columns:1fr}}
+.display-preview{position:sticky;top:calc(var(--nav-h) + 1rem)}
+/* Decorative brand watermark: pass the SVG as --wm-src:url(...) on the element. */
+.page-watermark{position:absolute;top:0;left:0;z-index:0;width:clamp(20rem,42%,38rem);aspect-ratio:612/912;background-color:var(--surface-muted);
+  -webkit-mask:var(--wm-src) no-repeat top left/contain;mask:var(--wm-src) no-repeat top left/contain;pointer-events:none;user-select:none}
+
+/* ---- page titles ---- */
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--text-secondary)}
+.intro{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-lg);flex-wrap:wrap;margin-bottom:1.75rem}
+.intro-text{flex:1 1 auto;min-width:16rem}
+.intro h1,.pagehead h1{font-size:clamp(1.375rem,1rem + 1.6vw,1.75rem);font-weight:700;line-height:1.2;margin:.3rem 0 0;text-wrap:balance;color:var(--text-primary)}
+.intro p,.pagehead p{color:var(--text-secondary);margin:.5rem 0 0;font-size:.8125rem;text-wrap:pretty}
+.pagehead{background:var(--surface-page);padding:1.75rem var(--space-lg) 0}
+.pagehead-in{max-width:var(--content-max);margin:0 auto;display:flex;align-items:flex-end;gap:var(--space-lg);flex-wrap:wrap}
+.pagehead .intro-text{flex:1 1 auto;min-width:16rem}
+.pagehead .actions{display:flex;align-items:center;gap:.6rem;flex:none}
+.section-head{margin-bottom:var(--space-md)}
+.section-head h2{font-size:1.15rem;font-weight:700;margin:.2rem 0 .3rem;color:var(--text-primary)}
+.section-head p{font-size:.88rem;color:var(--text-secondary);margin:0}
+.back-link{display:inline-flex;align-items:center;gap:.15rem;min-height:2rem;margin-bottom:var(--space-md);font-size:1rem;font-weight:600;color:var(--text-primary)}
+.back-link:hover{color:var(--text-primary);text-decoration:underline}
+/* Content-fitted sizes (count-tile, type-card h3 min-height, version-row .v width) are intentional — not spacing-scale values. */
+.count-tile{background:var(--surface-card);border:1px solid var(--border-default);border-radius:var(--radius-card);padding:.85rem 1.2rem;text-align:right;box-shadow:var(--shadow-card);flex:none}
+.count-tile .n{font-family:'JetBrains Mono',monospace;font-size:1.6rem;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--text-primary)}
+.count-tile .l{font-size:.72rem;color:var(--text-secondary);margin-top:.25rem}
+
+/* ---- buttons ---- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:var(--touch-min);padding:.6rem 1.1rem;
+  border:1px solid var(--border-default);border-radius:var(--radius-sm);background:var(--surface-card);color:var(--text-primary);
+  font-weight:600;font-size:.9rem;line-height:1.2;white-space:nowrap;text-decoration:none;
+  transition:background var(--dur-fast) ease,border-color var(--dur-fast) ease,transform .1s ease}
+.btn:hover{background:var(--surface-page);border-color:var(--border-strong);text-decoration:none;color:var(--text-primary)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--primary-color);border-color:var(--primary-color);color:var(--primary-contrast-color);box-shadow:var(--shadow-md)}
+.btn.primary:hover{background:var(--primary-color-shade);border-color:var(--primary-color-shade);color:var(--primary-contrast-color)}
+.btn.danger{background:var(--status-error);border-color:var(--status-error);color:var(--primary-contrast-color)}
+.btn.danger:hover{background:var(--status-error-text);border-color:var(--status-error-text);color:var(--primary-contrast-color)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.ghost:hover{background:var(--surface-muted)}
+.btn.sm{min-height:2.25rem;padding:.35rem .75rem;font-size:.82rem}
+.btn.block{width:100%}
+.btn:disabled,.btn[aria-disabled=true]{background:var(--surface-muted);border-color:var(--surface-muted);color:var(--text-secondary);box-shadow:none;cursor:not-allowed;transform:none}
+.btn[aria-busy=true]{pointer-events:none}
+.btn[aria-busy=true]::before{content:"";width:1em;height:1em;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.iconbtn{border:1px solid transparent;background:transparent;color:var(--text-secondary);width:2.25rem;height:2.25rem;padding:0;
+  border-radius:var(--radius-sm);display:inline-flex;align-items:center;justify-content:center;font-size:.9rem;transition:background var(--dur-fast) ease,color var(--dur-fast) ease}
+.iconbtn:hover{background:var(--surface-muted);color:var(--text-primary)}
+.iconbtn.danger:hover{color:var(--status-error-text);background:var(--status-error-bg)}
+.iconbtn:disabled{opacity:.3;cursor:not-allowed}
+.addbtn{width:100%;min-height:var(--touch-min);border:1.5px dashed var(--border-strong);background:transparent;color:var(--text-secondary);
+  padding:.55rem;border-radius:var(--radius-card);font-weight:600;font-size:.88rem;transition:border-color var(--dur) ease,color var(--dur) ease}
+.addbtn:hover{border-color:var(--primary-color);color:var(--primary-color)}
+
+/* ---- status badge: pill, soft background + strong text. One component for every status label. ---- */
+.badge{display:inline-flex;align-items:center;gap:.35rem;flex-shrink:0;padding:.25rem .65rem;border-radius:var(--radius-full);
+  font-size:.75rem;font-weight:600;line-height:1.3;white-space:nowrap;background:var(--surface-muted);color:var(--text-secondary)}
+.badge--success{background:var(--status-success-bg);color:var(--status-success-text)}
+.badge--warning{background:var(--status-warning-bg);color:var(--status-warning-text)}
+.badge--error{background:var(--status-error-bg);color:var(--status-error-text)}
+.badge--info{background:var(--status-info-bg);color:var(--status-info-text)}
+.badge .i{width:.9rem;height:.9rem}
+.meta-chip{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text-secondary);background:var(--surface-muted);padding:.3em .6em;border-radius:var(--radius-sm)}
+.fmt-tag{font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--surface-muted);color:var(--text-secondary);padding:.22em .5em;border-radius:var(--radius-sm)}
+
+/* ---- cards ---- */
+.card,.type-card,.profile-card,.accordion-row{background:var(--surface-card);border:1px solid var(--border-default);border-radius:var(--radius-card);box-shadow:var(--shadow-card)}
+.type-card,.profile-card,.card.interactive,.accordion-row{transition:border-color var(--dur) ease,box-shadow var(--dur) ease}
+.type-card:hover,.type-card:focus-visible,.profile-card:hover,.card.interactive:hover,.accordion-row:hover,.accordion-row:focus-within{
+  border-color:var(--primary-color);box-shadow:var(--shadow-card-hover);text-decoration:none}
+.card-bd{padding:1.25rem 1.5rem}
+.card-hd{padding:.7rem 1rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.card-hd .sub{font-size:.8rem;color:var(--text-secondary);font-weight:400}
+.card-hd .spacer{flex:1}
+.card-list{display:flex;flex-direction:column;gap:var(--space-md)}
+/* Busy card: processing over a visible card (verify, sign…). <div class="card busy"><div class="busy-inner">…</div><div class="busy-overlay"><span class="spinner"></span></div></div> */
+.card.busy{position:relative}
+.card.busy .busy-inner{opacity:.35;filter:blur(2px);pointer-events:none}
+.busy-overlay{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center}
+.spinner{width:3.5rem;height:3.5rem;border-radius:50%;border:.25rem solid var(--surface-muted);border-top-color:var(--primary-color);animation:spin .8s linear infinite}
+/* Copy row: value + copy button (identifiers, DIDs, codes). */
+.copy-row{display:flex;align-items:center;gap:var(--space-sm);min-width:0}
+.copy-row .value{flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy-row button{flex:none;display:inline-flex;align-items:center;justify-content:center;width:2.25rem;height:2.25rem;border:1px solid var(--border-default);
+  border-radius:var(--radius-md);background:var(--surface-page);color:var(--text-primary);transition:background var(--dur-fast) ease}
+.copy-row button:hover{background:var(--surface-muted)}
+/* Summary card: title + status badge, then a row of label/value cells (credential-card pattern). */
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-md);margin-bottom:1.25rem}
+.card-title{margin:0;font-size:1.125rem;font-weight:600;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis}
+.preview-row{display:flex;margin:0}
+.preview-cell{flex:1 1 0;min-width:0;padding:0 var(--space-md);border-left:1px solid var(--border-default)}
+.preview-cell:first-child{padding-left:0;border-left:0}
+.preview-cell dt{margin:0 0 .35rem;font-size:.875rem;font-weight:600;color:var(--text-primary)}
+.preview-cell dd{margin:0;font-size:.875rem;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:767px){.preview-row{flex-direction:column;gap:.75rem}.preview-cell{padding:0;border-left:0}}
+
+/* ---- list / catalog ---- */
+.toolbar{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;background:var(--surface-card);border:1px solid var(--border-default);border-radius:var(--radius-card);padding:.7rem .9rem;margin-bottom:var(--space-lg);box-shadow:var(--shadow-card)}
+.search{flex:1 1 14rem;min-width:10rem;display:flex;align-items:center;gap:.5rem;min-height:var(--touch-min);background:var(--surface-muted);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:0 .75rem}
+.search:focus-within{border-color:var(--primary-color);box-shadow:0 0 0 3px var(--primary-halo)}
+.search svg{flex:none;color:var(--text-secondary)}
+.search input{border:none;background:none;outline:none;width:100%;font-size:.9rem;color:var(--text-primary)}
+.type-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(15.5rem,1fr));gap:var(--space-md)}
+.type-card{display:flex;flex-direction:column;padding:1.25rem 1.5rem;cursor:pointer;text-align:left;color:inherit}
+.type-card h3{font-size:1.125rem;font-weight:600;line-height:1.3;margin:0 0 .75rem;color:var(--text-primary);min-height:2.9rem;overflow-wrap:break-word}
+.type-card .fmt-row{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.85rem}
+.type-card .row-foot{display:flex;align-items:center;justify-content:space-between;font-size:.8rem;color:var(--text-secondary);border-top:1px solid var(--border-default);padding-top:.7rem;margin-top:auto;gap:.5rem}
+.type-card .row-foot .v{font-family:'JetBrains Mono',monospace}
+.profile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:var(--space-md);margin-bottom:var(--space-lg)}
+.profile-card{padding:1.1rem 1.25rem;min-width:0;text-align:left;cursor:pointer}
+.profile-card.on{border-color:var(--primary-color);box-shadow:0 0 0 3px var(--primary-halo)}
+.profile-card.unavailable{opacity:.55}
+.profile-card h3{font-size:1rem;font-weight:700;margin:0 0 .55rem;display:flex;align-items:center;gap:.5rem;color:var(--text-primary)}
+.profile-card .dot{width:.5rem;height:.5rem;border-radius:50%;background:var(--border-strong);flex:none}
+.profile-card.on .dot{background:var(--status-success)}
+.profile-card p.note{font-size:.8rem;color:var(--text-secondary);margin:0}
+.profile-card dl{margin:0 0 .6rem}
+.profile-card dt{font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-secondary);font-family:'JetBrains Mono',monospace}
+.profile-card dd{margin:.1rem 0 .5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;background:var(--surface-muted);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:.45rem .6rem;word-break:break-all;color:var(--text-secondary)}
+
+/* ---- segmented control (switch between views/modes) ---- */
+.segmented{display:inline-grid;grid-auto-flow:column;grid-auto-columns:max-content;gap:.2rem;background:var(--surface-muted);border-radius:1rem;padding:.2rem}
+.segmented button{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.25rem;padding:0 1rem;border-radius:.875rem;
+  font-size:.875rem;font-weight:600;color:var(--text-primary);transition:background var(--dur) ease}
+.segmented button[aria-pressed=true]{background:var(--segment-checked-bg)}
+.segmented button:disabled{color:var(--text-secondary);cursor:not-allowed}
+@media (max-width:767px){.segmented{display:grid;width:100%;grid-auto-columns:1fr}}
+.prevtabs{display:flex;gap:.15rem;margin-bottom:.9rem;background:var(--surface-muted);padding:.2rem;border-radius:var(--radius-md)}
+.prevtab{flex:1;min-height:2.25rem;padding:.4rem .5rem;font-size:.8rem;font-weight:600;color:var(--text-secondary);border-radius:var(--radius-sm)}
+.prevtab.on{background:var(--surface-card);color:var(--text-primary);box-shadow:var(--shadow-sm)}
+
+/* ---- tabs ---- */
+.tabs{display:flex;gap:.15rem;border-bottom:1px solid var(--border-default);padding:0 1.25rem;overflow-x:auto;
+  background:var(--surface-card);border-radius:var(--radius-card) var(--radius-card) 0 0}
+.tab{min-height:var(--touch-min);padding:0 .8rem;font-size:.88rem;font-weight:600;color:var(--text-secondary);border-bottom:2px solid transparent;white-space:nowrap;transition:color var(--dur) ease,border-color var(--dur) ease}
+.tab:hover{color:var(--text-primary)}
+.tab.on,.tab[aria-selected=true]{color:var(--text-primary);border-bottom-color:var(--primary-color)}
+.tab .dot{display:inline-block;width:.4rem;height:.4rem;border-radius:50%;background:var(--status-error);margin-left:.3rem;vertical-align:2px}
+.tab .lock{font-size:.68rem;color:var(--text-secondary);margin-left:.25rem}
+
+/* ---- accordion rows (settings-style expandable cards) ---- */
+.accordion{display:flex;flex-direction:column;gap:.75rem}
+.accordion-row{overflow:hidden}
+.accordion-row h3{margin:0;font:inherit}
+.accordion-row__header{display:flex;align-items:center;gap:.75rem;width:100%;min-height:3.5rem;padding:.75rem 1rem;text-align:start;color:var(--text-primary)}
+.accordion-row__label{flex:1;min-width:0;font-size:.94rem;font-weight:600}
+.accordion-row__toggle{display:flex;align-items:center;justify-content:center;flex:none;width:1.75rem;height:1.75rem;border-radius:.5rem;
+  background:var(--surface-muted);color:var(--text-primary);transition:background var(--dur) ease,transform var(--dur) ease}
+.accordion-row__body{padding:0 1rem 1rem;font-size:.9rem;color:var(--text-secondary)}
+.accordion-row__header[aria-expanded=false]+.accordion-row__body{display:none}
+.accordion-row:has([aria-expanded=true]){border-color:var(--primary-color)}
+.accordion-row__header[aria-expanded=true] .accordion-row__toggle{background:var(--text-primary);color:var(--surface-card);transform:rotate(180deg)}
+
+/* ---- detail / read-only views ---- */
+.detail-top{padding-bottom:1.6rem;border-bottom:1px solid var(--border-default);margin-bottom:var(--space-xl)}
+.detail-top .status-row{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin-bottom:.9rem}
+.type-name{font-size:clamp(1.75rem,1.2rem + 2.5vw,2.5rem);font-weight:700;line-height:1.15;text-wrap:balance;margin:0 0 .3rem;color:var(--text-primary)}
+.identifier{font-family:'JetBrains Mono',monospace;font-size:.92rem;color:var(--action-primary);word-break:break-all}
+.lede p{font-size:1.05rem;margin:0 0 .6rem}
+.lede .provenance{font-size:.85rem;color:var(--text-secondary)}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:1px;background:var(--border-default);
+  border:1px solid var(--border-default);border-radius:var(--radius-card);overflow:hidden;margin:0 0 var(--space-lg)}
+.meta-cell{background:var(--surface-card);padding:.85rem 1rem}
+.meta-cell dt{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.07em;text-transform:uppercase;color:var(--text-secondary);margin:0 0 .35rem}
+.meta-cell dd{margin:0;font-size:.92rem;font-weight:600;color:var(--text-primary)}
+.version-list{list-style:none;margin:0;padding:0;background:var(--surface-card);border:1px solid var(--border-default);border-radius:var(--radius-card);overflow:hidden}
+.version-row{display:flex;align-items:center;gap:.9rem;padding:.8rem 1.1rem;border-bottom:1px solid var(--border-default);font-size:.88rem;flex-wrap:wrap}
+.version-row:last-child{border-bottom:none}
+.version-row .v{font-family:'JetBrains Mono',monospace;font-weight:600;width:3.4rem;flex:none;color:var(--text-primary)}
+.version-row .note{color:var(--text-secondary);flex:1}
+.version-row .state{margin-left:auto}
+.kv{font-size:.85rem;color:var(--text-secondary);display:flex;justify-content:space-between;gap:1rem;padding:.45rem 0;border-bottom:1px solid var(--surface-muted)}
+.kv:last-of-type{border-bottom:none}
+.kv span:last-child{color:var(--text-primary);font-weight:600;text-align:right}
+.citations ul{list-style:none;margin:0;padding:0;display:grid;gap:.55rem}
+.citations li{font-size:.85rem;color:var(--text-secondary);padding-left:1.1rem;position:relative}
+.citations li::before{content:"§";position:absolute;left:0;color:var(--border-strong);font-family:'JetBrains Mono',monospace}
+.citations strong{color:var(--text-primary);font-weight:600}
+.foot-note{margin-top:2.5rem;padding-top:var(--space-lg);border-top:1px solid var(--border-default);font-size:.8rem;color:var(--text-secondary)}
+.note-block{max-width:var(--content-max);margin:0 auto;padding:0 1.25rem 2.5rem;color:var(--text-secondary);font-size:.85rem;line-height:1.55}
+.note-block strong{color:var(--text-primary)}
+
+/* ---- forms ---- */
+.field{margin-bottom:var(--space-md)}
+.field label{display:block;font-size:.875rem;font-weight:600;color:var(--text-primary);margin-bottom:.3rem}
+.field input,.field select,.field textarea,.input{width:100%;min-height:var(--touch-min);padding:.55rem .75rem;border:1px solid var(--border-default);
+  border-radius:var(--radius-sm);background:var(--surface-card);color:var(--text-primary);font-size:.9rem;transition:border-color var(--dur-fast) ease,box-shadow var(--dur-fast) ease}
+.field textarea{min-height:6rem;resize:vertical;line-height:1.5}
+.field input:focus,.field select:focus,.field textarea:focus,.input:focus{outline:none;border-color:var(--primary-color);box-shadow:0 0 0 3px var(--primary-halo)}
+.field input:disabled,.field select:disabled,.field textarea:disabled{background:var(--surface-muted);color:var(--text-secondary);cursor:not-allowed}
+.field .help{font-size:.78rem;color:var(--text-secondary);margin-top:.3rem;line-height:1.45}
+.field.err input,.field.err select,.field.err textarea{border-color:var(--status-error)}
+.field.err input:focus,.field.err select:focus,.field.err textarea:focus{box-shadow:0 0 0 3px var(--status-error-bg)}
+.field.err .help{color:var(--status-error-text);font-weight:600}
+.checkline{display:flex;align-items:flex-start;gap:.5rem;min-height:var(--touch-min);align-items:center;font-size:.9rem;margin:.25rem 0 .75rem}
+.checkline input{width:1.1rem;height:1.1rem;accent-color:var(--primary-color)}
+/* Switch: <label class="switch"><input type="checkbox" role="switch"><span>Label</span></label> */
+.switch{display:inline-flex;align-items:center;gap:.6rem;min-height:var(--touch-min);font-size:.9rem;cursor:pointer}
+.switch input{appearance:none;width:2.6rem;height:1.5rem;border-radius:var(--radius-full);background:var(--border-strong);position:relative;margin:0;cursor:pointer;transition:background var(--dur) ease}
+.switch input::after{content:"";position:absolute;top:.2rem;left:.2rem;width:1.1rem;height:1.1rem;border-radius:50%;background:var(--surface-card);box-shadow:var(--shadow-sm);transition:transform var(--dur) var(--ease)}
+.switch input:checked{background:var(--primary-color)}
+.switch input:checked::after{transform:translateX(1.1rem)}
+.dropzone{display:flex;flex-direction:column;align-items:center;gap:.4rem;padding:var(--space-lg);border:1.5px dashed var(--border-strong);border-radius:var(--radius-card);
+  background:var(--surface-page);color:var(--text-secondary);font-size:.88rem;text-align:center;transition:border-color var(--dur) ease}
+.dropzone:hover{border-color:var(--primary-color)}
+.dropzone strong{color:var(--text-primary)}
+
+/* ---- validation, alerts, toasts ---- */
+.valbox{max-width:var(--content-max);margin:0 auto;padding:0 1.25rem 1.25rem;box-sizing:content-box}
+/* Alert: inline message with soft background + status accent bar. Also used for validation summaries inside .valbox. */
+.alert{display:flex;gap:.6rem;align-items:flex-start;border-radius:var(--radius-card);border-left:.25rem solid var(--status-info);padding:.8rem 1rem;
+  font-size:.875rem;margin-bottom:var(--space-md);color:var(--text-primary);background:var(--status-info-bg)}
+.alert>.i{margin-top:.15rem}
+.alert strong{display:block}
+.alert ul{margin:.3rem 0 0;padding-left:1.2rem}
+.alert--success{background:var(--status-success-bg);border-left-color:var(--status-success)} .alert--success>.i,.alert--success strong{color:var(--status-success-text)}
+.alert--warning{background:var(--status-warning-bg);border-left-color:var(--status-warning)} .alert--warning>.i,.alert--warning strong{color:var(--status-warning-text)}
+.alert--error{background:var(--status-error-bg);border-left-color:var(--status-error)} .alert--error>.i,.alert--error strong{color:var(--status-error-text)}
+.alert--info>.i,.alert--info strong{color:var(--status-info-text)}
+/* Pill banner (e.g. install/upsell hints): frosted, dismissible. */
+.pill-banner{display:flex;align-items:center;gap:.6rem;padding:.6rem 1rem;margin-bottom:var(--space-sm);background:var(--surface-card);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--border-default);border-radius:var(--radius-full);box-shadow:var(--shadow-sm);font-size:.85rem;color:var(--text-secondary)}
+.pill-banner .grow{flex:1}
+.toast-region{position:fixed;right:1rem;bottom:1rem;display:flex;flex-direction:column;gap:.5rem;z-index:40;max-width:22rem}
+.toast{background:var(--surface-card);border:1px solid var(--border-default);border-left:4px solid var(--status-info);border-radius:var(--radius-md);
+  box-shadow:var(--shadow-lg);padding:.75rem 1rem;font-size:.88rem;color:var(--text-primary);animation:card-fade-in var(--dur-enter) ease-out both}
+.toast--success{border-left-color:var(--status-success)} .toast--error{border-left-color:var(--status-error)}
+
+/* ---- modal (confirmation dialog) ---- */
+/* <div class="modal-backdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="…">…</div></div> */
+.modal-backdrop{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:var(--space-md);
+  background:var(--backdrop);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);animation:view-fade-in var(--dur) ease-out}
+.modal-backdrop[hidden]{display:none}
+.modal{position:relative;width:100%;max-width:22.5rem;background:var(--surface-card);border-radius:var(--radius-lg);padding:2rem 1.5rem 1.5rem;text-align:center;box-shadow:var(--shadow-lg);animation:card-fade-in var(--dur-enter) ease-out both}
+.modal-close{position:absolute;top:.75rem;right:.75rem}
+.modal-icon{display:flex;align-items:center;justify-content:center;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--surface-muted);margin:0 auto var(--space-md);font-size:1.6rem;color:var(--text-primary)}
+.modal h2{font-size:1.15rem;font-weight:700;color:var(--text-primary);margin:0 0 .5rem}
+.modal p{font-size:.85rem;color:var(--text-secondary);line-height:1.4;margin:0 0 var(--space-lg)}
+.modal-actions{display:flex;gap:.75rem}
+.modal-actions .btn{flex:1}
+
+/* ---- steps (numbered, connected) — "how it works" and wizard progress ---- */
+.steps{display:flex;align-items:flex-start;margin:0;padding:0;list-style:none}
+.step{position:relative;flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:var(--space-sm);text-align:center}
+.step:not(:last-child)::after{content:"";position:absolute;top:1rem;left:calc(50% + 1.4rem);right:calc(-50% + 1.4rem);height:1px;background:var(--border-default)}
+.step-number{display:flex;align-items:center;justify-content:center;flex:none;width:2rem;height:2rem;border:1px solid var(--border-strong);border-radius:50%;
+  background:var(--surface-page);color:var(--text-primary);font-size:.875rem;font-weight:600}
+.step-label{font-size:clamp(.6875rem,.6rem + .5vw,.8125rem);color:var(--text-primary);line-height:1.3;padding:0 .25rem}
+.step.current .step-number{background:var(--primary-color);border-color:var(--primary-color);color:var(--primary-contrast-color)}
+.step.current .step-label{font-weight:600}
+.step.done .step-number{background:var(--status-success-bg);border-color:var(--status-success);color:var(--status-success-text)}
+.step.done:not(:last-child)::after{background:var(--status-success)}
+
+/* ---- empty / loading / error states ---- */
+.empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;max-width:20rem;margin:clamp(2.5rem,15vw,5rem) auto 0;padding:var(--space-2xl) var(--space-lg)}
+.empty-state .icon{font-size:clamp(3rem,12vw,4rem);color:var(--text-secondary);opacity:.4;margin-bottom:var(--space-md)}
+.empty-state .illustration{width:clamp(9.5rem,45vw,12.4rem);height:auto;margin-bottom:var(--space-lg)}
+.empty-state h2{font-size:clamp(1rem,.9rem + .5vw,1.125rem);font-weight:600;color:var(--text-primary);margin:0 0 var(--space-sm)}
+.empty-state p{font-size:1rem;color:var(--text-secondary);margin:0;line-height:1.5;text-wrap:balance}
+.empty-state .btn{margin-top:var(--space-lg);width:100%;max-width:15rem}
+.empty-state .steps{width:100%;max-width:22.5rem;margin-top:var(--space-2xl)}
+.empty-state.wide{max-width:42.5rem;margin-top:0}
+.state-block{padding:var(--space-2xl) var(--space-md);text-align:center;color:var(--text-secondary);font-size:.9rem}
+.state-block h2{font-size:1.1rem;font-weight:700;color:var(--text-primary);margin:.4rem 0}
+.state-block .btn{margin-top:var(--space-md)}
+.state-block.error .eyebrow{color:var(--status-error)}
+@keyframes shimmer{from{background-position:100% 0}to{background-position:-100% 0}}
+.skeleton-line{height:.9rem;border-radius:var(--radius-sm);margin:.5rem auto;max-width:28rem;
+  background:linear-gradient(90deg,var(--surface-muted) 25%,var(--surface-page) 50%,var(--surface-muted) 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+.skeleton-line.short{max-width:16rem}
+
+/* ---- table ---- */
+.table-wrap{background:var(--surface-card);border:1px solid var(--border-default);border-radius:var(--radius-card);overflow-x:auto;box-shadow:var(--shadow-card)}
+.table{width:100%;border-collapse:collapse;font-size:.88rem}
+.table caption{text-align:left;padding:.8rem 1rem;font-weight:700;color:var(--text-primary)}
+.table th{text-align:left;font-size:.8rem;font-weight:600;color:var(--text-secondary);background:var(--surface-page);padding:.65rem 1rem;border-bottom:1px solid var(--border-default);white-space:nowrap}
+.table th[aria-sort]{cursor:pointer}
+.table th[aria-sort=ascending]::after{content:" ↑"} .table th[aria-sort=descending]::after{content:" ↓"}
+.table td{padding:.75rem 1rem;border-bottom:1px solid var(--border-default);color:var(--text-primary);vertical-align:middle}
+.table tr:last-child td{border-bottom:none}
+.table tbody tr{transition:background var(--dur-fast) ease}
+.table tbody tr:hover td{background:var(--surface-page)}
+.table td.mono{font-family:'JetBrains Mono',monospace;font-size:.8rem}
+.table td.num,.table th.num{text-align:right;font-variant-numeric:tabular-nums}
+.table td.acts{text-align:right;white-space:nowrap}
+
+/* ---- navigation helpers ---- */
+.breadcrumbs{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;list-style:none;margin:0 0 var(--space-md);padding:0;font-size:.85rem;color:var(--text-secondary)}
+.breadcrumbs li:not(:last-child)::after{content:"›";margin-left:.4rem;color:var(--border-strong)}
+.breadcrumbs a{color:var(--text-secondary)} .breadcrumbs [aria-current]{color:var(--text-primary);font-weight:600}
+.pagination{display:flex;align-items:center;justify-content:space-between;gap:var(--space-md);flex-wrap:wrap;margin-top:var(--space-md);font-size:.85rem;color:var(--text-secondary)}
+.pagination .pages{display:flex;gap:.25rem}
+.pagination .pages button{min-width:2.25rem;height:2.25rem;border-radius:var(--radius-sm);font-weight:600;color:var(--text-primary);transition:background var(--dur-fast) ease}
+.pagination .pages button:hover{background:var(--surface-muted)}
+.pagination .pages button[aria-current=page]{background:var(--primary-color);color:var(--primary-contrast-color)}
+.tooltip{position:relative;display:inline-flex}
+.tooltip [role=tooltip]{position:absolute;bottom:calc(100% + .4rem);left:50%;transform:translateX(-50%);background:var(--text-primary);color:var(--surface-card);
+  font-size:.78rem;line-height:1.35;padding:.35rem .6rem;border-radius:var(--radius-sm);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity var(--dur-fast) ease}
+.tooltip:hover [role=tooltip],.tooltip:focus-within [role=tooltip]{opacity:1}
+
+/* ---- mobile / PWA frame (skeleton-mobile.html) ---- */
+.app-bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:var(--space-sm);min-height:4rem;
+  padding:0 var(--space-md);padding-top:env(safe-area-inset-top,0);background:var(--primary-color);color:var(--primary-contrast-color)}
+.app-bar .logo{height:2rem;display:block}
+.app-bar .iconbtn{color:var(--primary-contrast-color);width:var(--touch-min);height:var(--touch-min)}
+.app-bar .iconbtn:hover{background:rgba(255,255,255,.12);color:var(--primary-contrast-color)}
+.mobile-page{position:relative;flex:1 0 auto;padding:var(--space-md) var(--space-md) calc(4rem + var(--space-lg));max-width:56rem;width:100%;margin:0 auto}
+.mobile-page>:not(.page-watermark){position:relative;z-index:1}
+@media (min-width:768px){.mobile-page{padding-inline:clamp(2rem,8vw,7.5rem)}}
+.list-header{display:flex;align-items:center;justify-content:space-between;gap:var(--space-md);padding:var(--space-md) 0 0}
+.list-header h1{margin:0;font-size:clamp(1.375rem,1rem + 1.6vw,1.75rem);font-weight:700;line-height:1.2;color:var(--text-primary)}
+@media (max-width:767px){.list-header{flex-direction:column;align-items:stretch;gap:var(--space-sm)}}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;height:4rem;padding-bottom:env(safe-area-inset-bottom,0);
+  background:var(--surface-card);box-shadow:0 -2px 12px rgba(0,0,0,.08)}
+.tabbar a{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.1rem;min-height:var(--touch-min);
+  font-size:clamp(.625rem,2.8vw,.75rem);font-weight:600;letter-spacing:.02em;color:var(--text-secondary);text-decoration:none;transition:color var(--dur) ease,background var(--dur) ease}
+.tabbar a svg{width:clamp(1.25rem,5.5vw,1.5rem);height:clamp(1.25rem,5.5vw,1.5rem)}
+.tabbar a[aria-current=page]{color:var(--text-primary);background:var(--surface-muted);box-shadow:inset 0 -2px 0 var(--secondary-color)}
+.toast-region.above-tabbar{bottom:5rem}
+
+/* ---- prototype-specific components (tokens only) ---- */
+.container-nav{background:var(--surface-page);border-bottom:1px solid var(--border-default)}
+.container-nav::before{content:"";display:block;height:4px;background:linear-gradient(to right,var(--brand-vermilion) 0 25%,var(--primary-color) 25% 50%,var(--brand-yellow) 50% 75%,var(--brand-black) 75% 100%)}
+.navbar-brand,.navbar-brand:hover{color:var(--text-primary);text-decoration:none}
+.navbar-brand .product{font-weight:700;font-size:1rem;padding-left:.6rem;border-left:1px solid var(--border-strong)}
+.navbar-nav{flex-wrap:wrap;gap:0 1.25rem}
+.user-btn.light{border-color:var(--border-default);color:var(--text-primary)}
+.user-btn.light:hover{background:var(--surface-muted)}
+.form-actions{display:flex;gap:.75rem;justify-content:flex-end;flex-wrap:wrap;margin-top:var(--space-md)}
+.valbox.flush{padding:0}
+.meta-cell .n{font-size:1.6rem;font-weight:700;font-variant-numeric:tabular-nums}
+.meta-cell.warn .n{color:var(--status-warning-text)}
+.section-gap{margin-top:var(--space-xl)}
+.detail-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:var(--space-md)}
+.secret-row{padding:.8rem 0;border-bottom:1px solid var(--border-default)}
+.secret-row:last-child{border-bottom:none}
+.secret-row .lbl{display:block;font-size:.875rem;font-weight:600;margin-bottom:.2rem}
+.secret-row .hint{font-size:.8125rem;color:var(--text-secondary)}
+.tree,.tree ul{list-style:none;margin:0;padding:0}
+.tree ul{margin-left:1.1rem;padding-left:1.4rem;border-left:2px solid var(--border-default)}
+.tree li{position:relative;margin-top:.75rem}
+.tree ul>li::before{content:"";position:absolute;left:-1.4rem;top:1.7rem;width:1.1rem;border-top:2px solid var(--border-default)}
+.tree-node{display:flex;align-items:center;gap:var(--space-md);flex-wrap:wrap;padding:.9rem 1.1rem;color:var(--text-primary);text-decoration:none}
+.tree-node:hover{color:var(--text-primary)}
+.tree-node .grow{flex:1 1 14rem;min-width:0}
+.tree-node .nm{font-weight:600;display:block}
+.tree-node .sub{font-size:.8125rem;color:var(--text-secondary)}
+.ghost-node{border-style:dashed;box-shadow:none;background:transparent}
+.ghost-node .nm{color:var(--text-secondary)}
+.modal .field{text-align:left}
+.copy-row button{padding:0}
+.toolbar .segmented{max-width:100%;overflow-x:auto}
+@media (max-width:767px){.toolbar .segmented button{padding:0 .5rem;font-size:.8125rem}.toolbar .segmented{grid-auto-columns:auto}}
+.table a{font-weight:600}
+.table .sub{display:block;font-size:.8125rem;color:var(--text-secondary)}
+@media (max-width:767px){.user-name{display:none}.main-header{padding-top:.5rem}}
+.section-note{margin-bottom:var(--space-lg)}
+.foot-note.tight{margin-top:0;padding-top:0;border-top:0}
+.linkbtn{padding:0;color:var(--action-primary);font-weight:600;text-decoration:underline;min-height:1.75rem}
+.linkbtn:hover{color:var(--action-primary-hover)}
+
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+<symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.4 8.6-7 10-3.6-1.4-7-5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 011-1h9"/></symbol>
+<symbol id="i-qr" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M14 14h2v2h-2zM18 14h2M14 18h2M18 18h2v2"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 5h16l-6 8v5l-4 2v-7L4 5z"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+<symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/></symbol>
+<symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h4a1 1 0 011 1v14a1 1 0 01-1 1h-4M10 16l4-4-4-4M14 12H4"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M10.6 5.1A10.4 10.4 0 0112 5c6.4 0 10 7 10 7a17 17 0 01-2.2 3.1M6.6 6.6A17 17 0 002 12s3.6 7 10 7a9.8 9.8 0 005.4-1.6"/><path d="M9.9 9.9a3 3 0 004.2 4.2"/><path d="M2 2l20 20"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+<symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></symbol>
+<symbol id="i-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16h.01"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 13h12l1-13M9 7V4h6v3"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 20V9M7 14l5-5 5 5M5 4h14"/></symbol>
+<symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M7 12h10"/></symbol>
+<symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></symbol>
+<symbol id="i-id" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6.5 16a3 3 0 015 0M14 10h4M14 13.5h3"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 014.9.7c0 1.6-2.4 2.1-2.4 3.8M12 17h.01"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></symbol>
+</svg>
+<a class="skip-link" href="#main">Salta al contingut</a>
+<div class="page-content">
+<div class="container-nav">
+  <header class="main-header">
+    <a class="navbar-brand" href="#/" aria-label="Fikua Signatura, inici"><svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 529 200" fill="none" role="img" aria-label="Fikua">
+  <g>
+      <line x1="100.00" y1="80.00" x2="100.00" y2="18.00" stroke="#E1241A" stroke-width="13" stroke-linecap="round"/>
+      <line x1="117.32" y1="90.00" x2="171.01" y2="59.00" stroke="#F6C915" stroke-width="13" stroke-linecap="round"/>
+      <line x1="117.32" y1="110.00" x2="171.01" y2="141.00" stroke="#1A1A1A" stroke-width="13" stroke-linecap="round"/>
+      <line x1="100.00" y1="120.00" x2="100.00" y2="182.00" stroke="#1A4C9C" stroke-width="13" stroke-linecap="round"/>
+      <line x1="82.68" y1="110.00" x2="28.99" y2="141.00" stroke="#F6C915" stroke-width="13" stroke-linecap="round"/>
+      <line x1="82.68" y1="90.00" x2="28.99" y2="59.00" stroke="#1A1A1A" stroke-width="13" stroke-linecap="round"/>
+  </g>
+  <g>
+      <g transform="translate(232.00,132.08) scale(0.06098,-0.06098)" fill="#1A1A1A">
+        <path transform="translate(0,0)" d="M278.49908447265625 -19.25994873046875Q229.49945068359375 -19.25994873046875 199.87969970703125 10.509857177734375Q170.25994873046875 40.2796630859375 170.25994873046875 94.33917236328125V880.8006591796875H95.239501953125Q56.919677734375 880.8006591796875 33.049835205078125 902.6305236816406Q9.17999267578125 924.4603881835938 9.17999267578125 964.9401245117188Q9.17999267578125 1003.7798461914062 33.049835205078125 1026.7497253417969Q56.919677734375 1049.7196044921875 95.239501953125 1049.7196044921875H170.25994873046875V1153.1201171875Q170.25994873046875 1305.5399780273438 242.31982421875 1378.8999633789062Q314.37969970703125 1452.2599487304688 450.1993408203125 1452.6199340820312Q536.2986450195312 1452.6199340820312 577.9684143066406 1426.9801025390625Q619.63818359375 1401.3402709960938 619.63818359375 1358.48046875Q619.63818359375 1306.16064453125 568.1383666992188 1291.720703125Q556.7783813476562 1288.5407104492188 543.598388671875 1286.9507141113281Q530.4183959960938 1285.3607177734375 513.4183959960938 1285.000732421875Q444.9583740234375 1284.28076171875 414.35833740234375 1250.66064453125Q383.75830078125 1217.04052734375 383.75830078125 1144.6002197265625V1049.7196044921875H526.4187622070312Q564.7385864257812 1049.7196044921875 588.6084289550781 1026.7497253417969Q612.478271484375 1003.7798461914062 612.478271484375 964.9401245117188Q612.478271484375 924.4603881835938 588.6084289550781 902.6305236816406Q564.7385864257812 880.8006591796875 526.4187622070312 880.8006591796875H386.73822021484375V94.33917236328125Q386.73822021484375 40.2796630859375 357.11846923828125 10.509857177734375Q327.49871826171875 -19.25994873046875 278.49908447265625 -19.25994873046875Z"/>
+        <path transform="translate(660,0)" d="M222.13946533203125 1211.400146484375Q170.3997802734375 1211.400146484375 133.62997436523438 1247.719970703125Q96.86016845703125 1284.039794921875 96.86016845703125 1334.8795166015625Q96.86016845703125 1386.71923828125 133.62997436523438 1422.5390625Q170.3997802734375 1458.35888671875 222.13946533203125 1458.35888671875Q274.69915771484375 1458.35888671875 311.4689636230469 1422.5390625Q348.23876953125 1386.71923828125 348.23876953125 1334.8795166015625Q348.23876953125 1284.039794921875 311.4689636230469 1247.719970703125Q274.69915771484375 1211.400146484375 222.13946533203125 1211.400146484375ZM222.13946533203125 -19.25994873046875Q173.5198974609375 -19.25994873046875 143.71011352539062 12.049835205078125Q113.90032958984375 43.359619140625 113.90032958984375 95.1591796875V956.3603515625Q113.90032958984375 1008.159912109375 143.71011352539062 1039.4696960449219Q173.5198974609375 1070.7794799804688 222.13946533203125 1070.7794799804688Q270.93902587890625 1070.7794799804688 300.6588134765625 1039.3796997070312Q330.37860107421875 1007.9799194335938 330.37860107421875 956.1803588867188V95.1591796875Q330.37860107421875 43.359619140625 300.6588134765625 12.049835205078125Q270.93902587890625 -19.25994873046875 222.13946533203125 -19.25994873046875Z"/>
+        <path transform="translate(1104,0)" d="M223.0394287109375 -19.25994873046875Q175.6798095703125 -19.25994873046875 145.24005126953125 11.329864501953125Q114.80029296875 41.919677734375 114.80029296875 95.1591796875V1347.8408203125Q114.80029296875 1401.080322265625 145.24005126953125 1431.6701354980469Q175.6798095703125 1462.2599487304688 223.0394287109375 1462.2599487304688Q270.3990478515625 1462.2599487304688 300.83880615234375 1431.6701354980469Q331.278564453125 1401.080322265625 331.278564453125 1347.6608276367188V602.6589965820312H332.718505859375L769.8196411132812 1031.3399047851562Q790.8594360351562 1052.7396850585938 809.3592529296875 1061.7595825195312Q827.8590698242188 1070.7794799804688 852.078857421875 1070.7794799804688Q892.0784912109375 1070.7794799804688 919.1582641601562 1043.9696960449219Q946.238037109375 1017.159912109375 946.238037109375 979.1602783203125Q946.238037109375 955.5805053710938 938.1681213378906 938.7106628417969Q930.0982055664062 921.8408203125 908.5184326171875 901.6210327148438L583.67724609375 593.8798828125L941.3786010742188 152.0784912109375Q958.3384399414062 130.13873291015625 964.3683776855469 113.53887939453125Q970.3983154296875 96.93902587890625 970.3983154296875 75.7991943359375Q970.3983154296875 34.89959716796875 941.6385498046875 7.81982421875Q912.8787841796875 -19.25994873046875 868.9791870117188 -19.25994873046875Q839.4395751953125 -19.25994873046875 818.6798095703125 -7.670135498046875Q797.9200439453125 3.919677734375 776.080322265625 33.97918701171875L426.65863037109375 466.000732421875L331.278564453125 376.16064453125V95.1591796875Q331.278564453125 41.919677734375 300.83880615234375 11.329864501953125Q270.3990478515625 -19.25994873046875 223.0394287109375 -19.25994873046875Z"/>
+        <path transform="translate(2137,0)" d="M470.69989013671875 -18.719970703125Q356.7999267578125 -18.719970703125 273.6400146484375 28.32000732421875Q190.4801025390625 75.3599853515625 146.00018310546875 162.7999267578125Q101.520263671875 250.2398681640625 101.520263671875 370.57977294921875V956.3603515625Q101.520263671875 1009.599853515625 131.96002197265625 1040.1896667480469Q162.3997802734375 1070.7794799804688 209.7593994140625 1070.7794799804688Q257.1190185546875 1070.7794799804688 287.55877685546875 1040.1896667480469Q317.99853515625 1009.599853515625 317.99853515625 956.1803588867188V412.559326171875Q317.99853515625 292.57904052734375 374.61865234375 229.85888671875Q431.23876953125 167.13873291015625 543.4191284179688 167.13873291015625Q621.3994140625 167.13873291015625 677.1296081542969 201.02883911132812Q732.8598022460938 234.9189453125 762.9299011230469 296.3291320800781Q793 357.73931884765625 793 439.4395751953125V956.3603515625Q793 1009.599853515625 823.4397583007812 1040.1896667480469Q853.8795166015625 1070.7794799804688 901.2391357421875 1070.7794799804688Q948.5987548828125 1070.7794799804688 979.0385131835938 1040.1896667480469Q1009.478271484375 1009.599853515625 1009.478271484375 956.1803588867188V90.5191650390625Q1009.478271484375 40.73968505859375 981.4485168457031 10.7398681640625Q953.4187622070312 -19.25994873046875 906.2391357421875 -19.25994873046875Q860.0595092773438 -19.25994873046875 831.1197509765625 10.7398681640625Q802.1799926757812 40.73968505859375 802.1799926757812 90.33917236328125V177.6396484375H797.4600219726562Q768.0799560546875 114.93975830078125 722.3899230957031 70.86984252929688Q676.6998901367188 26.7999267578125 613.9698791503906 4.03997802734375Q551.2398681640625 -18.719970703125 470.69989013671875 -18.719970703125Z"/>
+        <path transform="translate(3252,0)" d="M414.56005859375 -17.6400146484375Q312.10003662109375 -17.6400146484375 232.840087890625 22.0799560546875Q153.58013916015625 61.7999267578125 108.73019409179688 133.28988647460938Q63.8802490234375 204.77984619140625 63.8802490234375 298.85980224609375Q63.8802490234375 437.359619140625 165.9801025390625 518.5295715332031Q268.0799560546875 599.6995239257812 455.45965576171875 610.239501953125L744.2000732421875 626.8795166015625V707.9397583007812Q744.2000732421875 795.9200439453125 688.2499084472656 845.4202270507812Q632.2997436523438 894.92041015625 533.2993774414062 894.92041015625Q454.9591064453125 894.92041015625 400.2289123535156 864.4802856445312Q345.49871826171875 834.0401611328125 299.8787841796875 762.0799560546875Q268.05914306640625 715.7601318359375 211.85943603515625 715.7601318359375Q170.8397216796875 715.7601318359375 144.83990478515625 740.6799926757812Q118.840087890625 765.599853515625 118.840087890625 805.8196411132812Q118.840087890625 840.6396484375 137.50018310546875 875.8397216796875Q179.34027099609375 965.4395751953125 289.3300476074219 1018.3795166015625Q399.31982421875 1071.3194580078125 540.5392456054688 1071.3194580078125Q668.1190185546875 1071.3194580078125 762.2088317871094 1028.739501953125Q856.2986450195312 986.1595458984375 907.5885314941406 908.5396118164062Q958.87841796875 830.919677734375 958.87841796875 725.479736328125V89.97918701171875Q958.87841796875 38.919677734375 929.7586669921875 9.829864501953125Q900.638916015625 -19.25994873046875 855.0993041992188 -19.25994873046875Q810.1796264648438 -19.25994873046875 781.7798461914062 8.2999267578125Q753.3800659179688 35.85980224609375 751.5801391601562 84.0394287109375Q751.5801391601562 106.17962646484375 751.5801391601562 128.72982788085938Q751.5801391601562 151.280029296875 751.5801391601562 173.42022705078125H746.8601684570312Q716.2201538085938 115.3201904296875 664.400146484375 72.2601318359375Q612.5801391601562 29.2000732421875 548.0301208496094 5.780029296875Q483.4801025390625 -17.6400146484375 414.56005859375 -17.6400146484375ZM474.0792236328125 153.0390625Q549.5994873046875 153.0390625 610.8296813964844 184.61920166015625Q672.0598754882812 216.1993408203125 708.1299743652344 270.799560546875Q744.2000732421875 325.3997802734375 744.2000732421875 394.10003662109375V476.7601318359375L484.09930419921875 460.66009521484375Q387.5589599609375 454.2000732421875 334.6487731933594 413.43994140625Q281.73858642578125 372.6798095703125 281.73858642578125 304.61956787109375Q281.73858642578125 235.83935546875 334.5087585449219 194.439208984375Q387.2789306640625 153.0390625 474.0792236328125 153.0390625Z"/>
+      </g>
+  </g>
+</svg><span class="product">Signatura</span></a>
+    <div class="header-right">
+      <nav aria-label="Principal">
+        <ul class="navbar-nav">
+          <li><a class="nav-link" href="#/" data-nav="index" data-testid="nav-inici">Inici</a></li>
+          <li><a class="nav-link" href="#/usuaris" data-nav="usuaris" data-testid="nav-usuaris">Usuaris</a></li>
+          <li><a class="nav-link" href="#/credencials" data-nav="credencials" data-testid="nav-credencials">Credencials</a></li>
+          <li><a class="nav-link" href="#/certificats" data-nav="certificats" data-testid="nav-certificats">Certificats</a></li>
+          <li><a class="nav-link" href="#/activitat" data-nav="activitat" data-testid="nav-activitat">Activitat</a></li>
+        </ul>
+      </nav>
+      <div class="user-menu">
+        <button class="user-btn light" id="user-btn" aria-haspopup="true" aria-expanded="false" data-testid="user-menu"><span class="user-avatar" aria-hidden="true">AD</span><span class="user-name">Administració</span><svg class="i" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+        <div class="user-dropdown" id="user-dd" hidden>
+          <div class="user-dropdown-head"><span class="user-avatar lg" aria-hidden="true">AD</span><div><div class="nm">Equip de Fikua</div><div class="rl">Administració</div></div></div>
+          <a class="user-dropdown-item" href="#/sense-acces">Surt</a>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+<main class="shell" id="main" tabindex="-1">
+
+<div data-view="index">
+  <div class="intro"><div class="intro-text"><span class="eyebrow">Digital Signature Service</span><h1>Inici</h1><p>El que demana atenció i l'activitat de les últimes 24 hores.</p></div>
+    <a class="btn primary" href="#/usuaris/nou" data-testid="home-new-user"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg>Nou usuari</a></div>
+  <dl class="meta-grid" id="home-kpis"></dl>
+  <div class="section-head"><h2>Cal atenció</h2></div>
+  <div id="home-alerts"></div>
+  <div class="section-head"><h2>Última activitat</h2></div>
+  <div class="table-wrap"><table class="table" id="home-activity"></table></div>
+</div>
+
+<div data-view="usuaris" hidden>
+  <div class="intro"><div class="intro-text"><span class="eyebrow">Keycloak · realm dss</span><h1>Usuaris</h1><p>Cada usuari és una aplicació que demana firmes: un per client i entorn.</p></div>
+    <a class="btn primary" href="#/usuaris/nou" data-testid="users-new"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg>Nou usuari</a></div>
+  <div class="toolbar">
+    <div class="search"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><label class="sr-only" for="u-q">Cerca usuaris</label><input id="u-q" type="search" placeholder="Cerca per nom o client" data-testid="users-search"></div>
+    <div class="segmented" role="group" aria-label="Estat" id="u-state"><button aria-pressed="true" data-v="">Tots</button><button aria-pressed="false" data-v="actiu">Actius</button><button aria-pressed="false" data-v="inactiu">Inactius</button></div>
+  </div>
+  <div id="u-list"></div>
+</div>
+
+<div data-view="usuaris/nou" hidden>
+  <a class="back-link" href="#/usuaris"><svg class="i" aria-hidden="true"><use href="#i-chevron-left"/></svg>Usuaris</a>
+  <div class="intro"><div class="intro-text"><span class="eyebrow">Alta</span><h1>Nou usuari</h1><p>Es crea l'accés a Keycloak i una credencial amb la seva clau. Podrà signar quan la credencial tingui certificat.</p></div></div>
+  <div class="card"><div class="card-bd">
+    <form id="nu-form" novalidate>
+      <div class="valbox flush" aria-live="polite" id="nu-val"></div>
+      <div class="grid2">
+        <div class="field" id="f-client"><label for="nu-client">Client</label><input id="nu-client" list="nu-clients" autocomplete="off" aria-describedby="h-client" data-testid="nu-client"><datalist id="nu-clients"></datalist><div class="help" id="h-client">Qui farà servir l'usuari. Tria'n un o escriu-ne un de nou.</div></div>
+        <div class="field" id="f-env"><label for="nu-env">Entorn</label><select id="nu-env" data-testid="nu-env"><option value="dev">DEV</option><option value="stg">STG</option><option value="pro">PRO</option><option value="local">Local</option></select></div>
+        <div class="field" id="f-id"><label for="nu-id">client_id</label><input id="nu-id" class="mono" autocomplete="off" aria-describedby="h-id" data-testid="nu-id"><div class="help" id="h-id">Es proposa a partir del client i l'entorn. No es pot canviar després.</div></div>
+        <div class="field"><label for="nu-desc">Per a què serveix (opcional)</label><input id="nu-desc" data-testid="nu-desc"></div>
+      </div>
+      <div id="nu-warn"></div>
+      <div class="form-actions"><a class="btn" href="#/usuaris">Cancel·la</a><button class="btn primary" type="submit" data-testid="nu-submit">Crea l'usuari</button></div>
+    </form>
+  </div></div>
+</div>
+
+<div data-view="usuaris/nou/error" hidden>
+  <a class="back-link" href="#/usuaris/nou"><svg class="i" aria-hidden="true"><use href="#i-chevron-left"/></svg>Nou usuari</a>
+  <div class="state-block error" role="alert"><span class="eyebrow">No s'ha creat</span><h2>Keycloak no respon</h2><p>No s'ha creat res: ni l'accés ni la credencial. Torna-ho a provar d'aquí a uns minuts.</p><a class="btn" href="#/usuaris/nou">Torna a l'alta</a></div>
+</div>
+
+<div data-view="usuaris/carregant" hidden><div class="intro"><div class="intro-text"><span class="eyebrow">Keycloak · realm dss</span><h1>Usuaris</h1></div></div><div class="state-block" role="status"><span class="sr-only">Carregant usuaris</span><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line"></div></div></div>
+<div data-view="usuaris/error" hidden><div class="state-block error" role="alert"><span class="eyebrow">Error</span><h2>No es poden llegir els usuaris</h2><p>Keycloak no respon. Les firmes en curs no es veuen afectades: els tokens ja emesos continuen valent.</p><a class="btn" href="#/usuaris">Reintenta</a></div></div>
+<div data-view="sense-acces" hidden><div class="state-block error" role="alert"><span class="eyebrow">Sense accés</span><h2>El teu compte no pot administrar el DSS</h2><p>Cal el grup d'administració. Demana-ho a l'administració de la plataforma.</p><a class="btn" href="#/">Torna a l'inici</a></div></div>
+
+<div data-view="secrets" hidden>
+  <div class="intro"><div class="intro-text"><span class="eyebrow" id="s-eyebrow"></span><h1 id="s-title"></h1><p id="s-lede"></p></div></div>
+  <div class="alert alert--warning" role="status"><svg class="i" aria-hidden="true"><use href="#i-alert"/></svg><div><strong>Només es mostren ara</strong>Desa'ls en un gestor de contrasenyes. Si es perden, es roten; no es poden recuperar des d'aquest portal.</div></div>
+  <div class="card"><div class="card-bd" id="s-rows"></div></div>
+  <label class="checkline"><input type="checkbox" id="s-ok" data-testid="secrets-saved">Els he desat</label>
+  <div class="form-actions"><button class="btn primary" id="s-done" disabled data-testid="secrets-done">Continua</button></div>
+</div>
+
+<div data-view="usuari" hidden><a class="back-link" href="#/usuaris"><svg class="i" aria-hidden="true"><use href="#i-chevron-left"/></svg>Usuaris</a><div id="u-detail"></div></div>
+
+<div data-view="credencials" hidden>
+  <div class="intro"><div class="intro-text"><span class="eyebrow">CSC v2</span><h1>Credencials</h1><p>Amb què signa cada usuari: una clau creada pel DSS, el seu certificat i una contrasenya que autoritza cada firma.</p></div></div>
+  <div class="toolbar"><div class="search"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><label class="sr-only" for="c-q">Cerca credencials</label><input id="c-q" type="search" placeholder="Cerca per credencial o usuari" data-testid="creds-search"></div>
+    <div class="segmented" role="group" aria-label="Estat" id="c-state"><button aria-pressed="true" data-v="">Totes</button><button aria-pressed="false" data-v="activa">Actives</button><button aria-pressed="false" data-v="pendent">Pendents</button><button aria-pressed="false" data-v="revocada">Revocades</button></div></div>
+  <div id="c-list"></div>
+</div>
+<div data-view="credencial" hidden><a class="back-link" href="#/credencials"><svg class="i" aria-hidden="true"><use href="#i-chevron-left"/></svg>Credencials</a><div id="c-detail"></div></div>
+
+<div data-view="credencials/certificat/error" hidden>
+  <a class="back-link" href="#/credencial/valles-dev-002"><svg class="i" aria-hidden="true"><use href="#i-chevron-left"/></svg>valles-dev-002</a>
+  <div class="state-block error" role="alert"><span class="eyebrow">Certificat refusat</span><h2>El certificat és d'una altra clau</h2><p>La clau pública no és la d'aquesta credencial. No s'ha canviat res. Comprova que l'han emès amb la CSR baixada d'aquí.</p><a class="btn" href="#/credencial/valles-dev-002">Torna a la credencial</a></div>
+</div>
+
+<div data-view="certificats" hidden>
+  <div class="intro"><div class="intro-text"><span class="eyebrow">Cadena de confiança</span><h1>Certificats</h1><p>Qui emet què, fins quan val i quines credencials hi signen.</p></div></div>
+  <div id="cert-tree"></div>
+  <p class="foot-note">Els certificats els emet la PKI, no el DSS. El certificat d'una credencial es puja des de la seva fitxa.</p>
+</div>
+<div data-view="certificat" hidden><a class="back-link" href="#/certificats"><svg class="i" aria-hidden="true"><use href="#i-chevron-left"/></svg>Certificats</a><div id="cert-detail"></div></div>
+
+<div data-view="activitat" hidden>
+  <div class="intro"><div class="intro-text"><span class="eyebrow">Auditoria</span><h1>Activitat</h1><p>Canvis d'administració, accessos i firmes. No es pot editar.</p></div></div>
+  <div class="toolbar"><div class="search"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><label class="sr-only" for="a-q">Cerca activitat</label><input id="a-q" type="search" placeholder="Cerca per usuari o credencial" data-testid="act-search"></div>
+    <div class="segmented" role="group" aria-label="Tipus" id="a-type"><button aria-pressed="true" data-v="">Tot</button><button aria-pressed="false" data-v="admin">Administració</button><button aria-pressed="false" data-v="acces">Accessos</button><button aria-pressed="false" data-v="firma">Firmes</button></div></div>
+  <div id="a-list"></div>
+</div>
+</main>
+</div>
+<div class="modal-backdrop" id="modal" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-title">
+  <button class="iconbtn modal-close" aria-label="Tanca" id="m-x"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button>
+  <div class="modal-icon"><svg class="i" aria-hidden="true"><use id="m-icon" href="#i-alert"/></svg></div><h2 id="m-title"></h2><p id="m-text"></p><div id="m-extra"></div>
+  <div class="modal-actions"><button class="btn" id="m-cancel">Cancel·la</button><button class="btn primary" id="m-ok" data-testid="modal-ok"></button></div></div></div>
+<div class="toast-region" aria-live="polite"></div>
+<footer class="main-footer"><span>Fikua Signatura · Portal d'administració</span><span>|</span><span>dss#6 · mockup no funcional</span></footer>
+<script>
+/* Sample data: not read from any system. Secrets are random strings made in the page. */
+var TODAY='2026-11-24';
+var certs=[
+ {id:'root',name:'Arrel de proves (TEST)',kind:'Arrel',parent:null,org:'Laboratori · VATES-B00000000',from:'2026-09-02',to:'2031-09-02',key:'Fora del DSS',fp:'7A:1C:E4:90:5B:22:D8:0F:61:AE:33:C7:18:4D:9B:F2'},
+ {id:'valles',name:'Cooperativa Vallès · segell (TEST)',kind:'Segell',parent:'root',org:'Cooperativa Vallès · VATES-A00000000',from:'2026-09-03',to:'2028-09-02',key:'Al DSS',fp:'C3:08:5E:71:AA:4F:96:1D:E2:B7:50:38:6C:F9:04:8A'},
+ {id:'fikua',name:'Laboratori · segell de l\'emissor',kind:'Segell',parent:'root',org:'Laboratori · VATES-B00000000',from:'2026-09-03',to:'2028-09-02',key:'Al DSS',fp:'19:D4:6B:F0:82:3E:C5:57:0A:98:E1:2F:74:BD:63:40'},
+ {id:'verifier',name:'Laboratori · verificador',kind:'Segell',parent:'root',org:'Laboratori · VATES-B00000000',from:'2026-09-06',to:'2028-09-05',key:'Al DSS',fp:'E8:72:0D:A5:3C:91:4B:F6:DE:15:68:C0:29:87:B4:5F'},
+ {id:'wallet',name:'Laboratori · proveïdor de wallet',kind:'Segell',parent:'root',org:'Laboratori · VATES-B00000000',from:'2026-09-11',to:'2028-09-10',key:'Al DSS',fp:'56:BE:93:1A:F7:40:2D:8C:65:E9:0B:D3:7E:14:AC:C8'}];
+var users=[
+ {id:'valles-dev',client:'Cooperativa Vallès',env:'dev',state:'actiu',last:'2026-11-24 20:49',desc:"Emissor de credencials",signs:14},
+ {id:'valles-stg',client:'Cooperativa Vallès',env:'stg',state:'actiu',last:'2026-11-24 20:49',desc:"Emissor de credencials",signs:0},
+ {id:'valles-pro',client:'Cooperativa Vallès',env:'pro',state:'actiu',last:'',desc:'Proves internes, sense clients',signs:0},
+ {id:'valles-local',client:'Cooperativa Vallès',env:'local',state:'actiu',last:'2026-11-24 20:49',desc:'Entorns locals',signs:0},
+ {id:'valles-antic',client:'Cooperativa Vallès',env:'dev',state:'actiu',last:'2026-11-24 20:49',desc:'Client original',signs:3,legacy:true},
+ {id:'lab-issuer',client:'Laboratori',env:'pro',state:'actiu',last:'2026-11-24 20:49',desc:'Emissor de la Lab',signs:6},
+ {id:'lab-verifier',client:'Laboratori',env:'pro',state:'actiu',last:'2026-11-24 20:49',desc:'Verificador OID4VP',signs:2},
+ {id:'lab-wallet',client:'Laboratori',env:'pro',state:'inactiu',last:'2026-11-24 20:49',desc:'Proveïdor de wallet',signs:0}];
+var creds=[
+ {id:'valles-dev-001',user:'valles-dev',cert:'valles',state:'activa',rotated:'2026-11-24'},{id:'valles-dev-002',user:'valles-dev',cert:null,state:'pendent',rotated:'2026-11-24',dss:1},{id:'valles-stg-001',user:'valles-stg',cert:'valles',state:'activa',rotated:'2026-11-24'},
+ {id:'valles-pro-001',user:'valles-pro',cert:'valles',state:'activa',rotated:'2026-11-24'},{id:'valles-local-001',user:'valles-local',cert:'valles',state:'activa',rotated:'2026-11-24'},
+ {id:'valles-antic-001',user:'valles-antic',cert:'valles',state:'activa',rotated:'2026-05-14'},{id:'lab-issuer-001',user:'lab-issuer',cert:'fikua',state:'activa',rotated:'2026-09-03',dss:1},
+ {id:'lab-verifier-001',user:'lab-verifier',cert:'verifier',state:'activa',rotated:'2026-09-06',dss:1},{id:'lab-wallet-001',user:'lab-wallet',cert:'wallet',state:'activa',rotated:'2026-09-11'}];
+var log=[
+ {t:'2026-11-24 20:58',type:'admin',who:'Equip de Fikua',what:'Usuari creat',on:'valles-pro',ok:1},{t:'2026-11-24 20:49',type:'acces',who:'valles-dev',what:'Accés refusat: secret incorrecte',on:'valles-dev',ok:0},
+ {t:'2026-11-24 20:49',type:'acces',who:'valles-local',what:'Token emès',on:'valles-local',ok:1},{t:'2026-11-24 20:46',type:'admin',who:'Equip de Fikua',what:'Usuari creat',on:'valles-local',ok:1},
+ {t:'2026-11-24 20:29',type:'acces',who:'lab-issuer',what:'Token emès',on:'lab-issuer',ok:1},{t:'2026-11-24 20:19',type:'firma',who:'valles-antic',what:'Firma feta',on:'valles-antic-001',ok:1},
+ {t:'2026-11-24 20:19',type:'acces',who:'valles-antic',what:'Token emès',on:'valles-antic',ok:1},{t:'2026-11-24 19:34',type:'firma',who:'valles-stg',what:'Firma feta',on:'valles-stg-001',ok:1}];
+var ENV={dev:'DEV',stg:'STG',pro:'PRO',local:'Local'}, $=function(s){return document.querySelector(s)};
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function ic(n){return '<svg class="i" aria-hidden="true"><use href="#i-'+n+'"/></svg>'}
+function by(a,id){return a.filter(function(x){return x.id===id})[0]}
+function badge(k,t){return '<span class="badge'+(k?' badge--'+k:'')+'">'+esc(t)+'</span>'}
+function days(d){return Math.round((new Date(d)-new Date(TODAY))/864e5)}
+function dt(d){return d?d.slice(8,10)+'/'+d.slice(5,7)+'/'+d.slice(0,4)+(d.length>10?d.slice(10):''):'Mai'}
+function ustate(u){return u.state==='actiu'?badge('success','Actiu'):badge('','Inactiu')}
+function cstate(c){return c.state==='activa'?badge('success','Activa'):c.state==='pendent'?badge('info','Pendent de certificat'):badge('error','Revocada')}
+function rnd(n){var a='abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789',b=new Uint32Array(n),s='';crypto.getRandomValues(b);for(var i=0;i<n;i++)s+=a[b[i]%a.length];return s}
+function toast(t,k){var e=document.createElement('div');e.className='toast'+(k?' toast--'+k:'');e.setAttribute('role',k==='error'?'alert':'status');e.textContent=t;$('.toast-region').appendChild(e);setTimeout(function(){e.remove()},4000)}
+function add(type,what,on){log.unshift({t:TODAY+' 21:'+String(10+log.length%50).slice(-2),type:type,who:'Equip de Fikua',what:what,on:on,ok:1})}
+function table(cap,heads,rows){return '<div class="table-wrap"><table class="table"><caption class="sr-only">'+cap+'</caption><thead><tr>'+heads.map(function(h){return '<th scope="col">'+h+'</th>'}).join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>'}
+function empty(t,p){return '<div class="state-block" role="status"><h2>'+t+'</h2><p>'+p+'</p></div>'}
+
+/* modal */
+var mcb=null,mback=null;
+function ask(o){mback=document.activeElement;$('#m-title').textContent=o.title;$('#m-text').textContent=o.text;$('#m-icon').setAttribute('href','#i-'+(o.icon||'alert'));$('#m-extra').innerHTML=o.extra||'';var b=$('#m-ok');b.textContent=o.ok;b.className='btn '+(o.danger?'danger':'primary');mcb=o.cb;$('#modal').hidden=false;$('#m-cancel').focus()}
+function closeM(){$('#modal').hidden=true;if(mback&&document.contains(mback))mback.focus()}
+$('#m-cancel').onclick=$('#m-x').onclick=closeM;$('#m-ok').onclick=function(){var f=mcb;if(f&&f()===false)return;closeM()};
+document.addEventListener('keydown',function(e){if($('#modal').hidden)return;if(e.key==='Escape')closeM();if(e.key==='Tab'){var f=$('#modal').querySelectorAll('button,select,input');var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){z.focus();e.preventDefault()}else if(!e.shiftKey&&document.activeElement===z){a.focus();e.preventDefault()}}});
+$('#user-btn').onclick=function(){var d=$('#user-dd');d.hidden=!d.hidden;this.setAttribute('aria-expanded',String(!d.hidden))};
+document.addEventListener('click',function(e){if(!e.target.closest('.user-menu')){$('#user-dd').hidden=true;$('#user-btn').setAttribute('aria-expanded','false')}});
+
+/* one-time secrets */
+var snext='#/usuaris',pending=null;
+function secrets(o){pending=o;location.hash='#/secrets'}
+function rSecrets(){if(!pending){location.hash='#/usuaris';return}
+ $('#s-eyebrow').textContent=pending.eyebrow;$('#s-title').textContent=pending.title;$('#s-lede').textContent=pending.lede;snext=pending.next;$('#s-ok').checked=false;$('#s-done').disabled=true;
+ $('#s-rows').innerHTML=pending.rows.map(function(r,i){return '<div class="secret-row"><span class="lbl">'+esc(r[0])+'</span><div class="copy-row"><span class="value" id="sv'+i+'">'+esc(r[1])+'</span><button aria-label="Copia '+esc(r[0])+'" data-copy="sv'+i+'">'+ic('copy')+'</button></div><span class="hint">'+esc(r[2])+'</span></div>'}).join('')}
+$('#s-ok').onchange=function(){$('#s-done').disabled=!this.checked};$('#s-done').onclick=function(){pending=null;location.hash=snext};
+document.addEventListener('click',function(e){var b=e.target.closest('[data-copy]');if(!b)return;var t=document.getElementById(b.dataset.copy).textContent;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){toast('Copiat','success')},function(){toast('No s\'ha pogut copiar','error')});else toast('No s\'ha pogut copiar','error')});
+
+/* views */
+function rHome(){
+ var act=users.filter(function(u){return u.state==='actiu'}).length,sg=log.filter(function(l){return l.type==='firma'}).length,rj=log.filter(function(l){return !l.ok}).length,near=certs.filter(function(c){return days(c.to)<90}).length;
+ $('#home-kpis').innerHTML=[['Usuaris actius',act],['Firmes en 24 h',sg],['Rebuigs en 24 h',rj,rj>0],['Certificats que caduquen en 90 dies',near,near>0]].map(function(k){return '<div class="meta-cell'+(k[2]?' warn':'')+'"><dt>'+k[0]+'</dt><dd class="n">'+k[1]+'</dd></div>'}).join('');
+ var a='';
+ users.filter(function(u){return u.legacy&&u.state==='actiu'}).forEach(function(u){a+='<div class="alert alert--warning" role="status">'+ic('alert')+'<div><strong>'+esc(u.id)+' fa més de 180 dies que no es rota</strong>Rota\'l o desactiva\'l quan ja no es faci servir. <a href="#/usuari/'+u.id+'">Obre l\'usuari</a></div></div>'});
+ var pd=creds.filter(function(c){return c.state==='pendent'});
+ if(pd.length)a+='<div class="alert alert--info" role="status">'+ic('info')+'<div><strong>Pendent de certificat</strong>'+pd.map(function(c){return '<a href="#/credencial/'+c.id+'">'+esc(c.id)+'</a>'}).join(', ')+'</div></div>';
+ var nv=users.filter(function(u){return !u.last&&u.state==='actiu'});
+ if(nv.length)a+='<div class="alert alert--info" role="status">'+ic('info')+'<div><strong>Sense cap accés encara</strong>'+nv.map(function(u){return '<a href="#/usuari/'+u.id+'">'+esc(u.id)+'</a>'}).join(', ')+'</div></div>';
+ $('#home-alerts').innerHTML=a||'<div class="alert alert--success" role="status">'+ic('check-circle')+'<div><strong>Tot en ordre</strong></div></div>';
+ $('#home-activity').innerHTML=lrows(log.slice(0,5))}
+function lrows(l){return '<caption class="sr-only">Activitat</caption><thead><tr><th scope="col">Quan</th><th scope="col">Qui</th><th scope="col">Què</th><th scope="col">Sobre</th><th scope="col">Resultat</th></tr></thead><tbody>'+l.map(function(x){return '<tr><td class="mono">'+dt(x.t)+'</td><td>'+esc(x.who)+'</td><td>'+esc(x.what)+'</td><td class="mono">'+esc(x.on)+'</td><td>'+(x.ok?badge('success','Correcte'):badge('error','Refusat'))+'</td></tr>'}).join('')+'</tbody>'}
+var ust='',aty='';
+function rUsers(){var q=$('#u-q').value.toLowerCase();var l=users.filter(function(u){return (!ust||u.state===ust)&&(u.id+u.client+u.desc).toLowerCase().indexOf(q)>=0});
+ $('#u-list').innerHTML=l.length?table('Usuaris',['Usuari','Client','Entorn','Credencials','Últim accés','Estat'],l.map(function(u){return '<tr><td><a href="#/usuari/'+u.id+'" data-testid="user-'+u.id+'">'+esc(u.id)+'</a><span class="sub">'+esc(u.desc)+'</span></td><td>'+esc(u.client)+'</td><td>'+ENV[u.env]+'</td><td>'+creds.filter(function(c){return c.user===u.id}).length+'</td><td class="mono">'+dt(u.last)+'</td><td>'+ustate(u)+(u.legacy?' '+badge('error','Cal retirar'):'')+'</td></tr>'})):empty('Cap usuari coincideix','Prova amb un altre nom o treu el filtre.')}
+function rUser(id){var u=by(users,id),d=$('#u-detail');if(!u){d.innerHTML=empty('Aquest usuari no existeix','Potser s\'ha eliminat.');return}
+ var cs=creds.filter(function(c){return c.user===id}),on=u.state==='actiu';
+ d.innerHTML='<div class="detail-top"><div class="status-row">'+ustate(u)+'<span class="meta-chip">'+ENV[u.env]+'</span>'+(u.legacy?badge('error','Cal retirar'):'')+'</div><h1 class="type-name">'+esc(u.id)+'</h1><p>'+esc(u.desc||'Sense descripció')+'</p><div class="detail-actions"><button class="btn" data-act="rot" data-testid="rotate-secret">'+ic('lock')+'Rota el secret</button><button class="btn" data-act="cred" data-testid="add-cred">'+ic('plus')+'Afegeix una credencial</button>'+(on?'<button class="btn danger" data-act="off" data-testid="deactivate">Desactiva</button>':'<button class="btn primary" data-act="on" data-testid="activate">Torna a activar</button>')+'</div></div>'
+ +'<dl class="meta-grid"><div class="meta-cell"><dt>Client</dt><dd>'+esc(u.client)+'</dd></div><div class="meta-cell"><dt>Últim accés</dt><dd>'+dt(u.last)+'</dd></div><div class="meta-cell"><dt>Firmes (30 dies)</dt><dd>'+u.signs+'</dd></div><div class="meta-cell"><dt>Secret</dt><dd>Desat a Keycloak</dd></div></dl>'
+ +'<div class="section-head"><h2>Com s\'hi connecta</h2></div><div class="card"><div class="card-bd"><div class="secret-row"><span class="lbl">Token</span><div class="copy-row"><span class="value" id="uv1">https://dss.fikua.com/oauth2/token</span><button aria-label="Copia la URL del token" data-copy="uv1">'+ic('copy')+'</button></div></div><div class="secret-row"><span class="lbl">client_id</span><div class="copy-row"><span class="value" id="uv2">'+esc(u.id)+'</span><button aria-label="Copia client_id" data-copy="uv2">'+ic('copy')+'</button></div></div></div></div>'
+ +'<div class="section-head section-gap"><h2>Credencials</h2></div>'+(cs.length?table('Credencials de '+esc(id),['Credencial','Certificat','Contrasenya','Estat'],cs.map(crow)):empty('Sense credencials','Aquest usuari obté token però no pot signar.'))
+ +'<div class="section-head section-gap"><h2>Activitat</h2></div><div class="table-wrap"><table class="table">'+lrows(log.filter(function(l){return l.who===id||l.on===id||cs.some(function(c){return c.id===l.on})}))+'</table></div>';
+ d.querySelectorAll('[data-act]').forEach(function(b){b.onclick=function(){uact(b.dataset.act,u)}})}
+var grace='<div class="field"><label for="g-sel">El valor antic deixa de valer</label><select id="g-sel" data-testid="grace"><option value="24">D\'aquí a 24 hores</option><option value="1">D\'aquí a 1 hora</option><option value="0">Ara mateix</option></select></div>';
+function gtxt(){var v=$('#g-sel').value;return v==='0'?'El valor antic ja no val.':'El valor antic val encara '+(v==='1'?'1 hora':'24 hores')+'.'}
+function uact(a,u){
+ if(a==='rot')ask({title:'Rotar el secret de '+u.id+'?',text:'Es genera un secret nou a Keycloak. Els tokens ja emesos valen fins a una hora.',icon:'lock',extra:grace,ok:'Rota el secret',cb:function(){var g=gtxt();add('admin','Secret rotat',u.id);secrets({eyebrow:u.id,title:'Secret nou',lede:g,next:'#/usuari/'+u.id,rows:[['client_secret',rnd(48),'Es desa a Keycloak.']]})}});
+ if(a==='off')ask({title:'Desactivar '+u.id+'?',text:'No podrà demanar tokens nous ni signar, tampoc amb els que ja té. Es pot tornar a activar.',ok:'Desactiva',danger:1,cb:function(){u.state='inactiu';add('admin','Usuari desactivat',u.id);toast(u.id+' desactivat','success');rUser(u.id)}});
+ if(a==='on'){u.state='actiu';add('admin','Usuari activat',u.id);toast(u.id+' activat','success');rUser(u.id)}
+ if(a==='cred')newCred(u.id)}
+function newCred(uid){ask({title:'Nova credencial per a '+uid,text:'El DSS en crea la clau, que no en surt mai. Quedarà pendent fins que hi pugis el certificat.',icon:'card',ok:'Crea la credencial',cb:function(){var n=1,id;do{id=uid+'-'+('00'+n++).slice(-3)}while(by(creds,id));creds.push({id:id,user:uid,cert:null,state:'pendent',rotated:TODAY,dss:1});add('admin','Credencial creada',id);secrets({eyebrow:uid,title:'Credencial creada',lede:'El pas següent és demanar-ne el certificat.',next:'#/credencial/'+id,rows:[['credentialId',id,'Amb quina credencial es vol signar.'],['Contrasenya de la credencial',rnd(48),'Autoritza cada firma. El DSS només en desa el hash.']]})}})}
+var cst='';
+function certCell(c){var k=c.cert&&by(certs,c.cert);return k?'<a href="#/certificat/'+k.id+'">'+esc(k.name)+'</a><span class="sub">fins al '+dt(k.to)+'</span>':'<span class="sub">Encara no en té</span>'}
+function crow(c){return '<tr><td><a href="#/credencial/'+c.id+'" data-testid="cred-'+c.id+'">'+esc(c.id)+'</a><span class="sub">'+esc(c.user)+'</span></td><td>'+certCell(c)+'</td><td>Rotada el '+dt(c.rotated)+'</td><td>'+cstate(c)+'</td></tr>'}
+function rCreds(){var q=$('#c-q').value.toLowerCase(),l=creds.filter(function(c){return (!cst||c.state===cst)&&(c.id+c.user).toLowerCase().indexOf(q)>=0});$('#c-list').innerHTML=l.length?table('Credencials',['Credencial','Certificat','Contrasenya','Estat'],l.map(crow)):empty('Cap credencial coincideix','Prova amb un altre nom o treu el filtre.')}
+function dl(name,text){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'application/pkcs10'}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
+function csr(c){dl(c.id+'.csr','-----BEGIN CERTIFICATE REQUEST-----\nEXEMPLE: aquest fitxer no conte cap clau\n-----END CERTIFICATE REQUEST-----\n');add('admin','CSR baixada',c.id);toast('CSR baixada','success')}
+/* Only a public certificate is taken; a file with a private key is refused unread beyond that check. */
+function upload(c,renew){ask({title:renew?'Renovar el certificat':'Pujar el certificat',text:'El que ha emès la PKI amb la CSR d\'aquesta credencial. Només la part pública: la clau no es puja mai.',icon:'upload',extra:'<div class="field" id="up-f"><label for="up">Certificat (.pem, .crt o .cer)</label><input type="file" id="up" accept=".pem,.crt,.cer" aria-describedby="up-h" data-testid="cert-file"><div class="help" id="up-h">Ha de ser de la clau d\'aquesta credencial.</div></div>',ok:renew?'Renova':'Activa la credencial',cb:function(){var f=$('#up').files[0],m='';
+ if(!f)m='Tria el fitxer del certificat.';else if(/\.(p12|pfx|key)$/i.test(f.name))m='Aquest format pot portar la clau. Puja només el certificat.';else if(!/\.(pem|crt|cer)$/i.test(f.name))m='Ha de ser un fitxer .pem, .crt o .cer.';
+ if(m){upErr(m);return false}
+ f.text().then(function(t){if(/PRIVATE KEY/.test(t)){upErr('El fitxer porta una clau privada i s\'ha descartat. Puja només el certificat.');return}installCert(c,renew);closeM()});return false}})}
+function upErr(m){$('#up-f').classList.add('err');$('#up').setAttribute('aria-invalid','true');$('#up-h').textContent=m}
+function installCert(c,renew){var old=c.cert,id='c'+certs.length+'-'+c.id;certs.push({id:id,name:by(users,c.user).client+' · '+c.id,kind:'Segell',parent:'root',org:by(users,c.user).client,from:TODAY,to:'2028-11-23',key:'Al DSS, no en surt',fp:'0F:5A:'+rnd(4).toUpperCase()+':EXEMPLE'});
+ if(old){(c.past=c.past||[]).unshift(old)}c.cert=id;c.state='activa';add('admin',renew?'Certificat renovat':'Credencial activada',c.id);toast(renew?'Certificat renovat':'Credencial activada','success');rCred(c.id)}
+function rCred(id){var c=by(creds,id),d=$('#c-detail');if(!c){d.innerHTML=empty('Aquesta credencial no existeix','');return}var k=c.cert&&by(certs,c.cert),on=c.state==='activa',pend=c.state==='pendent',past=(c.past||[]).map(function(x){return by(certs,x)});
+ var acts='';
+ if(pend)acts='<button class="btn" data-a="csr" data-testid="csr">'+ic('download')+'Descarrega la CSR</button><button class="btn primary" data-a="up" data-testid="upload-cert">'+ic('upload')+'Puja el certificat</button>';
+ if(on&&c.dss)acts='<button class="btn" data-a="csr" data-testid="csr">'+ic('download')+'Descarrega la CSR</button><button class="btn" data-a="renew" data-testid="renew-cert">'+ic('upload')+'Renova el certificat</button>';
+ if(on||pend)acts+='<button class="btn" data-a="pw" data-testid="rotate-password">'+ic('lock')+'Rota la contrasenya</button><button class="btn danger" data-a="rev" data-testid="revoke">'+(pend?'Descarta':'Revoca')+'</button>';
+ var note='';
+ if(pend)note='<div class="card section-note"><div class="card-bd"><ol class="steps"><li class="step done"><span class="step-number">1</span><span class="step-label">Clau creada</span></li><li class="step current"><span class="step-number">2</span><span class="step-label">CSR a la PKI</span></li><li class="step"><span class="step-number">3</span><span class="step-label">Puja el certificat</span></li><li class="step"><span class="step-number">4</span><span class="step-label">Ja pot signar</span></li></ol></div></div>';
+ if(on&&!c.dss)note='<div class="alert alert--warning" role="status">'+ic('alert')+'<div><strong>La clau no la va crear el DSS</strong>És anterior a la PKI i no es renova. Crea una credencial nova, canvia-hi l\'aplicació i revoca aquesta.</div></div>';
+ d.innerHTML='<div class="detail-top"><div class="status-row">'+cstate(c)+(c.dss?'':badge('warning','Clau anterior a la PKI'))+'</div><h1 class="type-name">'+esc(c.id)+'</h1><p>Usuari <a href="#/usuari/'+c.user+'">'+esc(c.user)+'</a></p><div class="detail-actions">'+acts+'</div></div>'+note
+ +'<dl class="meta-grid"><div class="meta-cell"><dt>Certificat</dt><dd>'+(k?'<a href="#/certificat/'+k.id+'">'+esc(k.name)+'</a>':'Encara no en té')+'</dd></div><div class="meta-cell"><dt>Caduca</dt><dd>'+(k?dt(k.to):'—')+'</dd></div><div class="meta-cell"><dt>Clau</dt><dd>'+(c.dss?'ES256 (P-256) · creada pel DSS':'ES256 (P-256) · fitxer')+'</dd></div><div class="meta-cell"><dt>Contrasenya</dt><dd>Només el hash · rotada el '+dt(c.rotated)+'</dd></div></dl>'
+ +(c.dss&&on?'<p class="foot-note tight">Renovar manté la clau i la contrasenya. Per canviar de clau, <button class="linkbtn" data-a="new" data-testid="new-key">crea una credencial nova</button> i revoca aquesta.</p>':on?'<p class="foot-note tight"><button class="linkbtn" data-a="new" data-testid="new-key">Crea una credencial nova</button> per a '+esc(c.user)+'.</p>':'')
+ +(past.length?'<div class="section-head section-gap"><h2>Certificats anteriors</h2></div><ul class="version-list">'+past.map(function(x){return '<li class="version-row"><a href="#/certificat/'+x.id+'">'+esc(x.name)+'</a><span class="note">del '+dt(x.from)+' al '+dt(x.to)+'</span></li>'}).join('')+'</ul>':'')
+ +'<div class="section-head section-gap"><h2>Activitat</h2></div><div class="table-wrap"><table class="table">'+lrows(log.filter(function(l){return l.on===id}))+'</table></div>';
+ d.querySelectorAll('[data-a]').forEach(function(b){b.onclick=function(){var a=b.dataset.a;
+ if(a==='csr')csr(c);if(a==='up')upload(c,false);if(a==='renew')upload(c,true);if(a==='new')newCred(c.user);
+ if(a==='pw')ask({title:'Rotar la contrasenya?',text:'Es genera una contrasenya nova per a '+c.id+'. La clau i el certificat no canvien.',icon:'lock',extra:grace,ok:'Rota la contrasenya',cb:function(){var g=gtxt();c.rotated=TODAY;add('admin','Contrasenya rotada',c.id);secrets({eyebrow:c.id,title:'Contrasenya nova',lede:g,next:'#/credencial/'+c.id,rows:[['Contrasenya de la credencial',rnd(48),'El DSS només en desa el hash.']]})}});
+ if(a==='rev')ask({title:(pend?'Descartar ':'Revocar ')+c.id+'?',text:pend?'La clau s\'esborra i la CSR baixada deixa de servir. No es pot desfer.':'Deixarà de signar ara mateix i no es pot desfer. Demana també a la PKI que en revoqui el certificat. Les firmes ja fetes no canvien.',ok:pend?'Descarta':'Revoca',danger:1,cb:function(){c.state='revocada';add('admin',pend?'Credencial descartada':'Credencial revocada',c.id);toast(pend?'Credencial descartada':'Credencial revocada','success');rCred(id)}})}})}
+function node(c){var n=creds.filter(function(x){return x.cert===c.id&&x.state==='activa'}).length,dd=days(c.to);return '<a class="card interactive tree-node" href="#/certificat/'+c.id+'" data-testid="cert-'+c.id+'"><span class="grow"><span class="nm">'+esc(c.name)+'</span><span class="sub">'+c.kind+' · fins al '+dt(c.to)+(c.kind==='Segell'?' · '+n+(n===1?' credencial':' credencials'):'')+'</span></span>'+(dd<0?badge('error','Caducat'):dd<90?badge('warning','Caduca aviat'):badge('success','Vigent'))+'</a>'}
+function rCerts(){var r=certs.filter(function(c){return !c.parent});$('#cert-tree').innerHTML='<ul class="tree">'+r.map(function(c){return '<li>'+node(c)+'<ul><li><div class="card tree-node ghost-node"><span class="grow"><span class="nm">Cap intermediària</span><span class="sub">L\'arrel emet els segells directament</span></span></div></li>'+certs.filter(function(x){return x.parent===c.id}).map(function(x){return '<li>'+node(x)+'</li>'}).join('')+'</ul></li>'}).join('')+'</ul>'}
+function rCert(id){var c=by(certs,id),d=$('#cert-detail');if(!c){d.innerHTML=empty('Aquest certificat no existeix','');return}var p=c.parent&&by(certs,c.parent),cs=creds.filter(function(x){return x.cert===id});
+ d.innerHTML='<div class="detail-top"><div class="status-row">'+badge('',c.kind)+(days(c.to)<0?badge('error','Caducat'):badge('success','Vigent'))+'</div><h1 class="type-name">'+esc(c.name)+'</h1><p>'+esc(c.org)+'</p><div class="detail-actions"><button class="btn" data-dl>'+ic('download')+'Baixa la cadena (PEM)</button></div></div>'
+ +'<dl class="meta-grid"><div class="meta-cell"><dt>Emès per</dt><dd>'+(p?'<a href="#/certificat/'+p.id+'">'+esc(p.name)+'</a>':'Autosignat')+'</dd></div><div class="meta-cell"><dt>Vàlid des de</dt><dd>'+dt(c.from)+'</dd></div><div class="meta-cell"><dt>Caduca</dt><dd>'+dt(c.to)+' ('+days(c.to)+' dies)</dd></div><div class="meta-cell"><dt>Clau privada</dt><dd>'+esc(c.key)+'</dd></div></dl><div class="card"><div class="card-bd"><div class="secret-row"><span class="lbl">Empremta SHA-256 (exemple, abreujada)</span><div class="copy-row"><span class="value" id="fpv">'+c.fp+'</span><button aria-label="Copia l\'empremta" data-copy="fpv">'+ic('copy')+'</button></div></div></div></div>'
+ +(c.kind==='Segell'?'<div class="section-head section-gap"><h2>Credencials que hi signen</h2></div>'+(cs.length?table('Credencials',['Credencial','Certificat','Contrasenya','Estat'],cs.map(crow)):empty('Cap credencial','Aquest certificat no s\'utilitza.')):'<div class="section-head section-gap"><h2>Ha emès</h2></div><ul class="tree">'+certs.filter(function(x){return x.parent===id}).map(function(x){return '<li>'+node(x)+'</li>'}).join('')+'</ul>');
+ d.querySelector('[data-dl]').onclick=function(){toast('Mockup: aquí es baixaria la cadena, sense la clau')}}
+function rLog(){var q=$('#a-q').value.toLowerCase(),l=log.filter(function(x){return (!aty||x.type===aty)&&(x.who+x.on+x.what).toLowerCase().indexOf(q)>=0});$('#a-list').innerHTML=l.length?'<div class="table-wrap"><table class="table">'+lrows(l)+'</table></div>':empty('Cap esdeveniment coincideix','Treu el filtre o canvia la cerca.')}
+function seg(id,f){$(id).addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;this.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});f(b.dataset.v)})}
+seg('#u-state',function(v){ust=v;rUsers()});seg('#c-state',function(v){cst=v;rCreds()});seg('#a-type',function(v){aty=v;rLog()});$('#u-q').oninput=rUsers;$('#c-q').oninput=rCreds;$('#a-q').oninput=rLog;
+
+/* new user */
+var touched=false;
+function slug(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function propose(){if(!touched)$('#nu-id').value=$('#nu-client').value?slug($('#nu-client').value)+'-'+$('#nu-env').value:'';$('#nu-warn').innerHTML=$('#nu-env').value==='pro'?'<div class="alert alert--warning" role="status">'+ic('alert')+'<div><strong>PRO amb la PKI de prova</strong>El DSS no és un prestador qualificat. No l\'utilitzis per a credencials reals de clients.</div></div>':''}
+function rNew(){var f=$('#nu-form');f.reset();touched=false;$('#nu-val').innerHTML='';f.querySelectorAll('.field').forEach(function(x){err(x.id,'')});var s={};users.forEach(function(u){s[u.client]=1});$('#nu-clients').innerHTML=Object.keys(s).map(function(c){return '<option value="'+esc(c)+'">'}).join('');propose()}
+var HELP={};['f-client','f-id'].forEach(function(i){HELP[i]=document.querySelector('#'+i+' .help').textContent});
+function err(id,m){if(!HELP[id])return;var f=document.getElementById(id),i=f.querySelector('input,select');f.classList.toggle('err',!!m);i.setAttribute('aria-invalid',m?'true':'false');f.querySelector('.help').textContent=m||HELP[id]}
+$('#nu-client').oninput=$('#nu-env').onchange=propose;$('#nu-id').oninput=function(){touched=true};
+$('#nu-form').onsubmit=function(e){e.preventDefault();var c=$('#nu-client').value.trim(),id=$('#nu-id').value.trim(),b=[];
+ err('f-client',c?'':(b.push('client'),'Escriu el client.'));err('f-id',!id?(b.push('id'),'Escriu un identificador.'):!/^[a-z0-9][a-z0-9-]{2,40}$/.test(id)?(b.push('id'),'Només minúscules, xifres i guions; de 3 a 41 caràcters.'):by(users,id)?(b.push('id'),'Ja hi ha un usuari amb aquest identificador.'):'');
+ $('#nu-val').innerHTML=b.length?'<div class="alert alert--error" role="alert">'+ic('x-circle')+'<div><strong>Revisa '+b.length+(b.length===1?' camp':' camps')+'</strong></div></div>':'';
+ if(b.length){this.querySelector('[aria-invalid=true]').focus();return}
+ users.unshift({id:id,client:c,env:$('#nu-env').value,state:'actiu',last:'',desc:$('#nu-desc').value.trim(),signs:0});creds.unshift({id:id+'-001',user:id,cert:null,state:'pendent',rotated:TODAY,dss:1});add('admin','Usuari creat',id);
+ secrets({eyebrow:'Alta feta',title:id+' creat',lede:'Aquests quatre valors són tot el que necessita l\'aplicació. Podrà signar quan la credencial tingui certificat.',next:'#/credencial/'+id+'-001',rows:[['client_id',id,'Qui demana el token.'],['client_secret',rnd(48),'Generat i desat per Keycloak.'],['credentialId',id+'-001','Amb quina credencial es vol signar.'],['Contrasenya de la credencial',rnd(48),'Autoritza cada firma. El DSS només en desa el hash.']]})};
+
+/* Hash router: '#/<view>' shows [data-view]; '#/usuari/<id>', '#/credencial/<id>' and '#/certificat/<id>' carry an id. */
+var R={index:rHome,usuaris:rUsers,'usuaris/nou':rNew,usuari:rUser,credencials:rCreds,credencial:rCred,certificats:rCerts,certificat:rCert,activitat:rLog,secrets:rSecrets};
+function route(){if(location.hash&&location.hash.indexOf('#/')!==0)return;var key=location.hash.replace('#/','')||'index',m=/^(usuari|credencial|certificat)\/(.+)$/.exec(key),id=null;if(m){key=m[1];id=decodeURIComponent(m[2])}
+ var vs=document.querySelectorAll('[data-view]'),ok=[].some.call(vs,function(v){return v.dataset.view===key});if(!ok)key='index';vs.forEach(function(v){v.hidden=v.dataset.view!==key});
+ var nav={usuari:'usuaris',credencial:'credencials',certificat:'certificats',secrets:'usuaris'}[key]||key.split('/')[0];document.querySelectorAll('[data-nav]').forEach(function(a){if(a.dataset.nav===nav)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+ if(R[key])R[key](id);window.scrollTo(0,0)}
+window.addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>
