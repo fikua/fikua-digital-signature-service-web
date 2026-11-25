@@ -46,6 +46,11 @@ function certificateCard(cert) {
     ${kv('Vàlid des de', fmtDate(cert.notBefore))}${kv('Vàlid fins a', fmtDate(cert.notAfter))}${kv('SHA-256', cert.sha256, true)}</div></div>`
 }
 
+function overlapText(hours) {
+  if (!hours) return 'L\'anterior ja no val.'
+  return `L'anterior val ${hours} ${hours === 1 ? 'hora' : 'hores'} més.`
+}
+
 export async function renderCredential(main, id) {
   const back = backLink('#/credencials', 'Credencials')
   main.innerHTML = back + loading()
@@ -110,7 +115,7 @@ export async function renderCredential(main, id) {
     try {
       await busy(e.submitter, () => api.installCertificate(c.id, pem))
       toast(renewal ? 'Certificat renovat' : 'Credencial activa')
-      renderCredential(main, id)
+      await renderCredential(main, id)
     } catch (err) {
       $('#c-val', main).innerHTML = alertBox('error', 'Certificat refusat. ', errorText(err) + ' No s\'ha canviat res.')
     }
@@ -125,18 +130,18 @@ export async function renderCredential(main, id) {
     try {
       const p = await busy(e.currentTarget, () => api.rotatePassword(c.id, overlap))
       showSecrets({ eyebrow: 'Contrasenya nova', title: c.id,
-        lede: overlap ? `L'anterior val ${overlap} ${overlap === 1 ? 'hora' : 'hores'} més.` : 'L\'anterior ja no val.',
+        lede: overlapText(overlap),
         rows: [{ label: 'Contrasenya de la credencial (PIN)', value: p.credentialPassword }], next: `#/credencial/${encodeURIComponent(c.id)}` })
     } catch (err) { toast(errorText(err), 'error') }
   })
   $('#c-revoke', main).addEventListener('click', async e => {
     const ok = await confirm({ title: `Revocar ${c.id}`, ok: 'Revoca i destrueix la clau', danger: true, iconName: 'trash',
-      text: `La clau es destrueix: no es pot desfer. ${c.certificate ? `Cal revocar també el certificat «${commonName(c.certificate.subject)}» a la PKI.` : ''}` })
+      text: 'La clau es destrueix: no es pot desfer.' + (c.certificate ? ` Cal revocar també el certificat «${commonName(c.certificate.subject)}» a la PKI.` : '') })
     if (!ok) return
     try {
       await busy(e.currentTarget, () => api.revoke(c.id))
       toast('Credencial revocada')
-      renderCredential(main, id)
+      await renderCredential(main, id)
     } catch (err) { toast(errorText(err), 'error') }
   })
 }

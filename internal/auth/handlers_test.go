@@ -63,7 +63,7 @@ type rig struct {
 func newRig(t *testing.T) *rig {
 	t.Helper()
 	r := &rig{realm: &stubRealm{accessLife: 5 * time.Minute}, store: session.NewStore(30*time.Minute, 8*time.Hour)}
-	r.h = NewHandlers(r.realm, r.store, public, true, slog.New(slog.NewTextHandler(io.Discard, nil)))
+	r.h = NewHandlers(r.realm, r.store, public, slog.New(slog.NewTextHandler(io.Discard, nil)))
 	r.mux = http.NewServeMux()
 	r.mux.HandleFunc("GET /auth/login", r.h.Login)
 	r.mux.HandleFunc("GET /auth/callback", r.h.Callback)
@@ -271,14 +271,5 @@ func TestLogout(t *testing.T) {
 	}
 	if w := r.do(api("GET", "/api/v1/users", "", ""), s); w.Code != 401 {
 		t.Errorf("session after logout: %d", w.Code)
-	}
-}
-
-func TestLocalCookieNames(t *testing.T) {
-	h := NewHandlers(&stubRealm{}, session.NewStore(time.Minute, time.Hour), "http://localhost:5173", false, slog.New(slog.NewTextHandler(io.Discard, nil)))
-	w := httptest.NewRecorder()
-	h.Login(w, httptest.NewRequest("GET", "/auth/login", nil))
-	if c := cookie(w, "fikua-sign-login"); c == nil || c.Secure {
-		t.Errorf("local login cookie: %+v", c)
 	}
 }

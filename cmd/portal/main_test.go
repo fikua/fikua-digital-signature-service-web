@@ -23,7 +23,7 @@ func TestRoutes(t *testing.T) {
 	}
 	jwks, _ := realm.JWKS()
 	base, _ := url.Parse("http://127.0.0.1:1")
-	h := routes(auth.NewHandlers(realm, session.NewStore(time.Minute, time.Hour), "https://dss-admin.example", true, log),
+	h := routes(auth.NewHandlers(realm, session.NewStore(time.Minute, time.Hour), "https://dss-admin.example", log),
 		api.NewProxy(base, log), jwks)
 
 	for _, c := range []struct {

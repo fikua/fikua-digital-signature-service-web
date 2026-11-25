@@ -24,7 +24,7 @@ func TestDefaults(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if c.Listen != ":8080" || c.ClientID != "fikua-sign-web" || !c.SecureCookies {
+	if c.Listen != ":8080" || c.ClientID != "fikua-sign-web" {
 		t.Errorf("defaults: %+v", c)
 	}
 	if c.SessionIdle != 30*time.Minute || c.SessionMax != 8*time.Hour {
@@ -58,10 +58,10 @@ func TestEveryMissingValueIsReported(t *testing.T) {
 
 func TestRefusesWrongValues(t *testing.T) {
 	cases := map[string]map[string]string{
-		"plain http with secure cookies": {"PUBLIC_URL": "http://localhost:5173"},
-		"relative url":                   {"ADMIN_API_URL": "fikua-digital-signature-service:9092"},
-		"duration":                       {"SESSION_IDLE": "soon"},
-		"negative duration":              {"SESSION_MAX": "-1h"},
+		"plain http":        {"PUBLIC_URL": "http://dss-admin.fikua.com"},
+		"relative url":      {"ADMIN_API_URL": "fikua-digital-signature-service:9092"},
+		"duration":          {"SESSION_IDLE": "soon"},
+		"negative duration": {"SESSION_MAX": "-1h"},
 	}
 	for name, change := range cases {
 		m := valid()
@@ -74,12 +74,10 @@ func TestRefusesWrongValues(t *testing.T) {
 	}
 }
 
-func TestPlainHTTPOnlyWithoutSecureCookies(t *testing.T) {
+func TestPlainHTTPOnlyOnLocalhost(t *testing.T) {
 	m := valid()
 	m["PUBLIC_URL"] = "http://localhost:5173"
-	m["SECURE_COOKIES"] = "false"
-	c, err := parse(env(m))
-	if err != nil || c.SecureCookies {
+	if _, err := parse(env(m)); err != nil {
 		t.Fatalf("local configuration refused: %v", err)
 	}
 }

@@ -138,7 +138,7 @@ export async function renderUser(main, clientId) {
       try {
         await busy(e.submitter, () => api.adoptUser(u.clientId, { customer, environment: $('#ad-env', main).value, description: $('#ad-desc', main).value.trim() }))
         toast('Usuari adoptat')
-        renderUser(main, clientId)
+        await renderUser(main, clientId)
       } catch (err) {
         $('#ad-val', main).innerHTML = alertBox('error', 'No s\'ha adoptat. ', errorText(err))
       }
@@ -181,7 +181,7 @@ export async function renderUser(main, clientId) {
     try {
       await busy(e.currentTarget, () => api.setActive(u.clientId, !u.active))
       toast(u.active ? 'Usuari desactivat' : 'Usuari activat')
-      renderUser(main, clientId)
+      await renderUser(main, clientId)
     } catch (err) { toast(errorText(err), 'error') }
   })
 }

@@ -45,7 +45,7 @@ func run(log *slog.Logger) error {
 	}
 	store := session.NewStore(cfg.SessionIdle, cfg.SessionMax)
 	go store.Sweep(ctx, time.Minute)
-	sign := auth.NewHandlers(realm, store, cfg.PublicURL.String(), cfg.SecureCookies, log)
+	sign := auth.NewHandlers(realm, store, cfg.PublicURL.String(), log)
 	server := &http.Server{
 		Addr:              cfg.Listen,
 		Handler:           routes(sign, api.NewProxy(cfg.AdminAPI, log), jwks),

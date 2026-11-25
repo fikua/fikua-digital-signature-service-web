@@ -53,9 +53,9 @@ type Store struct {
 // LoginTTL is how long a sign-in may take at the realm.
 const LoginTTL = 10 * time.Minute
 
-// NewStore makes an empty store; idle and max bound every session.
-func NewStore(idle, max time.Duration) *Store {
-	return &Store{sessions: map[string]*Session{}, logins: map[string]*Login{}, idle: idle, max: max, now: time.Now}
+// NewStore makes an empty store; idle and maxAge bound every session.
+func NewStore(idle, maxAge time.Duration) *Store {
+	return &Store{sessions: map[string]*Session{}, logins: map[string]*Login{}, idle: idle, max: maxAge, now: time.Now}
 }
 
 // Random is 32 random bytes, URL-safe.

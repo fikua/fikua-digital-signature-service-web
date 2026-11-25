@@ -21,6 +21,6 @@ export async function renderHome(main) {
     `${kpi('Pendents de certificat', s.pending, '#/credencials', true)}${kpi('Caduquen en 30 dies', s.expiring, '#/certificats', true)}</dl>` +
     `<div class="section-head section-gap"><h2>Cal atenció</h2></div>` +
     (s.alerts.length
-      ? `<ul class="alerts">${s.alerts.map(a => `<li>${alertBox(a.tone, a.title, ' ' + a.text, a.href)}</li>`).join('')}</ul>`
+      ? '<ul class="alerts">' + s.alerts.map(a => '<li>' + alertBox(a.tone, a.title, ' ' + a.text, a.href) + '</li>').join('') + '</ul>'
       : `<p class="foot-note tight">Res pendent.</p>`)
 }

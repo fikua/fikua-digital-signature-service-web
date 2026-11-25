@@ -99,4 +99,4 @@ async function start() {
   route()
 }
 
-start()
+await start()

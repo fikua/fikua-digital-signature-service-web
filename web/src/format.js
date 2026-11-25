@@ -57,13 +57,26 @@ export function validClientId(id) {
   return CLIENT_ID.test(id ?? '')
 }
 
+function trimDashes(s) {
+  let start = 0
+  let end = s.length
+  while (start < end && s[start] === '-') start++
+  while (end > start && s[end - 1] === '-') end--
+  return s.slice(start, end)
+}
+
 /** "Cooperativa Vallès", "dev" → "cooperativa-valles-dev". */
 export function proposeClientId(customer, env) {
-  const slug = String(customer ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+  let slug = ''
+  for (const ch of String(customer ?? '').normalize('NFD').replaceAll(/\p{M}/gu, '').toLowerCase()) {
+    const ok = (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')
+    if (ok) slug += ch
+    else if (!slug.endsWith('-')) slug += '-'
+  }
+  slug = trimDashes(slug)
   if (!slug) return ''
   const suffix = env ? '-' + env : ''
-  return slug.slice(0, 41 - suffix.length).replace(/-+$/, '') + suffix
+  return trimDashes(slug.slice(0, 41 - suffix.length)) + suffix
 }
 
 function matches(q, ...values) {
@@ -83,7 +96,7 @@ export function filterCredentials(creds, q, status) {
 /** The common name of a distinguished name, or the whole name. */
 export function commonName(dn) {
   const m = /(?:^|,)\s*CN=((?:\\,|[^,])+)/.exec(dn ?? '')
-  return m ? m[1].replace(/\\,/g, ',').trim() : (dn ?? '')
+  return m ? m[1].replaceAll(String.raw`\,`, ',').trim() : (dn ?? '')
 }
 
 /**

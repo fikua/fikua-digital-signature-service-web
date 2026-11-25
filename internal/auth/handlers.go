@@ -32,21 +32,17 @@ type Handlers struct {
 	realm   Tokens
 	store   *session.Store
 	public  string // https://dss-admin.fikua.com
-	secure  bool
 	session string // cookie names
 	login   string
 	log     *slog.Logger
 }
 
-// NewHandlers wires the sign-in. With secure cookies their names carry the
-// __Host- prefix: only over HTTPS, for this host and path / only.
-func NewHandlers(realm Tokens, store *session.Store, publicURL string, secure bool, log *slog.Logger) *Handlers {
-	h := &Handlers{realm: realm, store: store, public: publicURL, secure: secure, log: log,
-		session: "fikua-sign", login: "fikua-sign-login"}
-	if secure {
-		h.session, h.login = "__Host-"+h.session, "__Host-"+h.login
-	}
-	return h
+// NewHandlers wires the sign-in. The cookies are Secure with the __Host-
+// prefix: only over HTTPS (browsers also accept http://localhost), for this
+// host and path / only.
+func NewHandlers(realm Tokens, store *session.Store, publicURL string, log *slog.Logger) *Handlers {
+	return &Handlers{realm: realm, store: store, public: publicURL, log: log,
+		session: "__Host-fikua-sign", login: "__Host-fikua-sign-login"}
 }
 
 // Login sends the browser to the realm. ?return= is a path of the portal to come back to.
@@ -181,7 +177,7 @@ func (h *Handlers) fail(w http.ResponseWriter, r *http.Request, reason string, s
 }
 
 func (h *Handlers) setCookie(w http.ResponseWriter, name, value string, same http.SameSite, ttl time.Duration) {
-	c := &http.Cookie{Name: name, Value: value, Path: "/", HttpOnly: true, Secure: h.secure, SameSite: same}
+	c := &http.Cookie{Name: name, Value: value, Path: "/", HttpOnly: true, Secure: true, SameSite: same}
 	if ttl > 0 {
 		c.MaxAge = int(ttl.Seconds())
 	}
@@ -190,7 +186,7 @@ func (h *Handlers) setCookie(w http.ResponseWriter, name, value string, same htt
 
 func (h *Handlers) clearCookie(w http.ResponseWriter, name string, same http.SameSite) {
 	http.SetCookie(w, &http.Cookie{Name: name, Value: "", Path: "/", MaxAge: -1, HttpOnly: true,
-		Secure: h.secure, SameSite: same})
+		Secure: true, SameSite: same})
 }
 
 // safeReturn keeps only paths of this portal: never another host.

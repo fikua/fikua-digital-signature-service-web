@@ -52,3 +52,4 @@ button.user-dropdown-item{width:100%;background:none;border:0;cursor:pointer;tex
 .alerts a.alert:hover{box-shadow:var(--shadow-md)}
 a.mono,a.mono:visited{color:var(--action-primary)}
 @media (max-width:767px){.hide-sm{display:none}}
+dialog.modal{position:relative;inset:auto;margin:0;border:0;color:inherit}

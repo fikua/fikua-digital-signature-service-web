@@ -23,13 +23,12 @@ Fikua Sign checks the token again (issuer, audience `https://dss-admin.fikua.com
 
 | Variable | Default | |
 |---|---|---|
-| `PUBLIC_URL` | | Where browsers reach the portal: `https://dss-admin.fikua.com` |
+| `PUBLIC_URL` | | Where browsers reach the portal: `https://dss-admin.fikua.com`; plain HTTP only on `localhost` |
 | `OIDC_ISSUER` | | The realm, as in its tokens: `https://auth.fikua.com/realms/fikua` |
 | `OIDC_INTERNAL_ISSUER` | `OIDC_ISSUER` | The same realm from the server (token and keys): `http://keycloak:8080/realms/fikua` |
 | `OIDC_CLIENT_ID` | `fikua-sign-web` | |
 | `ADMIN_API_URL` | | Fikua Sign's administration port: `http://fikua-digital-signature-service:9092` |
 | `SESSION_IDLE`, `SESSION_MAX` | `30m`, `8h` | |
-| `SECURE_COOKIES` | `true` | `false` only on a local machine over plain HTTP |
 | `LISTEN_ADDR` | `:8080` | |
 
 The client's `jwks.url` in Keycloak must reach `/auth/jwks` (in production `http://fikua-sign-web:8080/auth/jwks`, on `traefik-public`).
@@ -46,7 +45,7 @@ make image                # the production image
 Locally, with a Keycloak with the realms of `fikua-platform-iac/tofu/keycloak` and a Fikua Sign with its administration API:
 
 ```bash
-go run ./cmd/portal       # PUBLIC_URL=http://localhost:5173 SECURE_COOKIES=false OIDC_ISSUER=… ADMIN_API_URL=…
+go run ./cmd/portal       # PUBLIC_URL=http://localhost:5173 OIDC_ISSUER=… ADMIN_API_URL=…
 cd web && npm run dev     # http://localhost:5173, /auth and /api go to :8080
 ```
 

@@ -27,8 +27,6 @@ type Config struct {
 	// SessionIdle and SessionMax bound a session: without requests, and in total.
 	SessionIdle time.Duration
 	SessionMax  time.Duration
-	// SecureCookies is false only on a local machine over plain HTTP.
-	SecureCookies bool
 }
 
 // FromEnv reads the configuration; the error lists every missing or wrong value.
@@ -77,7 +75,6 @@ func parse(get func(string) string) (Config, error) {
 		ClientID:       value("OIDC_CLIENT_ID", "fikua-sign-web"),
 		SessionIdle:    duration("SESSION_IDLE", "30m"),
 		SessionMax:     duration("SESSION_MAX", "8h"),
-		SecureCookies:  value("SECURE_COOKIES", "true") != "false",
 	}
 	c.PublicURL = absolute("PUBLIC_URL", strings.TrimSuffix(required("PUBLIC_URL"), "/"))
 	c.AdminAPI = absolute("ADMIN_API_URL", strings.TrimSuffix(required("ADMIN_API_URL"), "/"))
@@ -86,8 +83,8 @@ func parse(get func(string) string) (Config, error) {
 		c.InternalIssuer = c.Issuer
 	}
 	absolute("OIDC_INTERNAL_ISSUER", c.InternalIssuer)
-	if c.SecureCookies && c.PublicURL != nil && c.PublicURL.Scheme != "https" {
-		errs = append(errs, errors.New("PUBLIC_URL must be https unless SECURE_COOKIES=false"))
+	if c.PublicURL != nil && c.PublicURL.Scheme != "https" && !local(c.PublicURL) {
+		errs = append(errs, errors.New("PUBLIC_URL must be https (or http://localhost)"))
 	}
 	return c, errors.Join(errs...)
 }
@@ -95,4 +92,10 @@ func parse(get func(string) string) (Config, error) {
 // RedirectURL is where the realm sends the browser back after signing in.
 func (c Config) RedirectURL() string {
 	return c.PublicURL.String() + "/auth/callback"
+}
+
+// local: browsers treat http://localhost as secure, Secure cookies included.
+func local(u *url.URL) bool {
+	h := u.Hostname()
+	return h == "localhost" || h == "127.0.0.1" || h == "::1"
 }

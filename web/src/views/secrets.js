@@ -13,6 +13,13 @@ export function showSecrets({ eyebrow, title, lede, rows, next }) {
   location.hash = '#/secrets'
 }
 
+function secretRow(r, i) {
+  const hint = r.hint ? `<span class="hint">${esc(r.hint)}</span>` : ''
+  return `<div class="secret-row"><span class="lbl">${esc(r.label)}</span>` +
+    `<div class="copy-row"><span class="value" id="secret-${i}">${esc(r.value)}</span>` +
+    `<button type="button" data-copy="${i}" aria-label="Copia ${esc(r.label)}" data-testid="copy-${i}">${icon('copy')}</button></div>${hint}</div>`
+}
+
 export function renderSecrets(main) {
   if (!shown) {
     location.replace('#/')
@@ -21,11 +28,8 @@ export function renderSecrets(main) {
   const { eyebrow, title, lede, rows, next } = shown
   main.innerHTML = intro(eyebrow, title, lede) +
     alertBox('warning', 'Només es mostren ara', ' Desa\'ls en un gestor de contrasenyes. Si es perden, es roten: no es poden recuperar.') +
-    `<div class="card"><div class="card-bd">${rows.map((r, i) => `
-      <div class="secret-row"><span class="lbl">${esc(r.label)}</span>
-        <div class="copy-row"><span class="value" id="secret-${i}">${esc(r.value)}</span>
-          <button type="button" data-copy="${i}" aria-label="Copia ${esc(r.label)}" data-testid="copy-${i}">${icon('copy')}</button></div>
-        ${r.hint ? `<span class="hint">${esc(r.hint)}</span>` : ''}</div>`).join('')}</div></div>
+    '<div class="card"><div class="card-bd">' + rows.map(secretRow).join('') + '</div></div>' +
+    `
     <label class="checkline"><input type="checkbox" id="s-ok" data-testid="secrets-saved">Els he desat</label>
     <div class="form-actions"><button class="btn primary" type="button" id="s-done" disabled data-testid="secrets-done">Continua</button></div>`
   $$('[data-copy]', main).forEach(b => b.addEventListener('click', async () => {
