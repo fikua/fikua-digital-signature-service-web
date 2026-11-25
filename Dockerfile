@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # The page is built by Vite and embedded in the Go binary: one static binary.
-FROM --platform=$BUILDPLATFORM node:24-alpine AS web
+FROM --platform=$BUILDPLATFORM node:26-alpine AS web
 WORKDIR /src/web
 COPY web/package.json web/package-lock.json ./
 RUN npm ci --ignore-scripts
