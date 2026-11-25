@@ -75,8 +75,9 @@ func (h *Handlers) Callback(w http.ResponseWriter, r *http.Request) {
 		h.fail(w, r, "unknown or expired sign-in", http.StatusBadRequest)
 		return
 	}
-	if e := q.Get("error"); e != "" {
-		h.log.InfoContext(r.Context(), "sign-in not completed", "error", e)
+	if q.Get("error") != "" {
+		// The realm's error code is not logged: it comes from the browser.
+		h.log.InfoContext(r.Context(), "sign-in not completed at the realm")
 		http.Redirect(w, r, "/#/sense-acces", http.StatusFound)
 		return
 	}

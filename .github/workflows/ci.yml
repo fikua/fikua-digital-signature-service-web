@@ -23,6 +23,9 @@ jobs:
       test-command: go test -race -count=1 ./...
 
   web:
+    permissions:
+      contents: read
+      pull-requests: read
     uses: fikua/fikua-ci-workflows/.github/workflows/node-ci.yml@617baa88c2f37b53b84a9024f72298da1caa35cf  # v1.3.0
     with:
       working-directory: web
