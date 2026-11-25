@@ -54,3 +54,5 @@ jobs:
     uses: fikua/fikua-ci-workflows/.github/workflows/image-release.yml@617baa88c2f37b53b84a9024f72298da1caa35cf  # v1.3.0
     with:
       image: fikua-digital-signature-service-web
+      # GHCR only (ADR 0015): a new repository never had a Docker Hub image.
+      dockerhub: false
