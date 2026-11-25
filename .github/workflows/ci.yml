@@ -1,0 +1,53 @@
+name: CI
+
+# Shared workflows: fikua/fikua-ci-workflows (ADR 0018). Publishes
+# fikua/fikua-digital-signature-service-web on every push to main and on
+# releases once the tests pass; deploying it is a separate step
+# (fikua-platform-iac/projects/fikua-digital-signature-service-web).
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md', 'prototype/**']
+  pull_request:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    uses: fikua/fikua-ci-workflows/.github/workflows/go-ci.yml@617baa88c2f37b53b84a9024f72298da1caa35cf  # v1.3.0
+    with:
+      test-command: go test -race -count=1 ./...
+
+  web:
+    uses: fikua/fikua-ci-workflows/.github/workflows/node-ci.yml@617baa88c2f37b53b84a9024f72298da1caa35cf  # v1.3.0
+    with:
+      working-directory: web
+
+  gitleaks:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    uses: fikua/fikua-ci-workflows/.github/workflows/gitleaks.yml@617baa88c2f37b53b84a9024f72298da1caa35cf  # v1.3.0
+
+  sonar:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: read
+    uses: fikua/fikua-ci-workflows/.github/workflows/sonar.yml@617baa88c2f37b53b84a9024f72298da1caa35cf  # v1.3.0
+    with:
+      coverpkg: ./internal/...
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  release:
+    needs: [test, web]
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      packages: write
+    uses: fikua/fikua-ci-workflows/.github/workflows/image-release.yml@617baa88c2f37b53b84a9024f72298da1caa35cf  # v1.3.0
+    with:
+      image: fikua-digital-signature-service-web

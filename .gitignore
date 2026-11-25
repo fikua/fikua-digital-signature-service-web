@@ -1,0 +1,9 @@
+# Built by Vite (web/), embedded by Go: only the placeholder is tracked.
+internal/web/dist/*
+!internal/web/dist/README.txt
+web/node_modules/
+bin/
+*.out
+coverage.out
+test-report.json
+.env
